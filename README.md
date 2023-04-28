@@ -69,3 +69,5 @@ Une fois fais, toujours sur la branche maBranche, exécuter la commande :
 ### `git push`
 
 Vous allez avoir une erreur lors de votre premier push sur une nouvelle branche. Copier la commande git push ... qu'on vous propose, et coller là pour l'exécuter, ça va push correctement votre code.
+
+Ensuite, aller dans git hub, et cliquer sur le bouton "créer une pull request" puis créer votre pull request. Enfin, demander à votre mate de review la PR et les modifications avant de merge les changements afin d'avoir un deuxième avis. 
