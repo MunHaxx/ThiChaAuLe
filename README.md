@@ -1,70 +1,71 @@
-# Getting Started with Create React App
+# Comment utiliser notre application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Comment clone le projet ?
 
-## Available Scripts
+Pour clone le projet, allez dans votre terminal, mettez vous à l'endroit où vous souhaitez copier le dépot, puis entrer la commande
 
-In the project directory, you can run:
+### `git clone https://github.com/MunHaxx/ThiChaAuLe.git`
 
-### `npm start`
+Ensuite, vous pouvez entrer dans le répertoire "ThiChaAuLe" et installer les packages nodes-modules avec la commande
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### `npm install`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Enfin, pour lancer le projet, il suffit de lancer le script Bash présent dans le répertoire. Pour les utilisateurs de Mac, lancer 
 
-### `npm test`
+### `./startRiche.sh`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Et pour les utilisateurs windows utiliser :
 
-### `npm run build`
+### `startPauvre.bat`
+(En vrai c'est pas sûr que ça marche, donc gaffe, il faudra qu'on revoit ça.) 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<br><br>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Comment coder ?
+Créer une branche sur votre projet dépot local en faisant 
+### `git branch maBranche`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Puis déplacez vous sur cette branche en faisant
 
-### `npm run eject`
+### `git checkout maBranche`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Désormais, vous pouvez coder, et tous les commits que vous ferez seront sauvegarder sur cette branche.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<br><br>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Comment commit ?
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Pour commit sur VsCode il faut cliquer sur le petit icone représentant des branches git à gauche. Ensuite, e choisir les fichiers à "staged" en cliquant sur le plus (ce sont les fichiers qui seront commit). Après cela, mettez un message qui décrit au mieux votre commit. Enfin, vous pouvez cliquer sur commit.
 
-## Learn More
+(A noter que chaque commit que vous faites ne sera visible que par vous et présent que sur votre PC tant que vous n'avez pas push. Donc vous pouvez en faire autant que vous voulez)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<br><br>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Mettre à jour votre branche
+Avant tout, il faut commit vos changements (se référer à la section précédente)
 
-### Code Splitting
+### `git checkout develop`
+(Permet de se mettre sur la branche develop)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### `git pull`
+(Récupère les dernières modifications du dépot git)
 
-### Analyzing the Bundle Size
+### `git checkout maBranche`
+(Permet de se mettre sur la branche maBranche)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### `git merge develop`
+(Copie la branche de develop sur la branche courante, ici maBranche)
 
-### Making a Progressive Web App
+Après avoir exécuter toutes ces commandes, il vous suffit de régler les conflits si conflits il y a. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+<br><br>
 
-### Advanced Configuration
+## Comment push ces modifications ?
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Avant tout, il faut mettre à jour votre branche (se référer à la section correspondante)
 
-### Deployment
+Une fois fais, toujours sur la branche maBranche, exécuter la commande :
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### `git push`
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+A finir pour faire une PR
