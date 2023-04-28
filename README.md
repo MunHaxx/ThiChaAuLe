@@ -63,7 +63,7 @@ Après avoir exécuter toutes ces commandes, il vous suffit de régler les confl
 ## Comment push ces modifications ?
 
 Avant tout, il faut mettre à jour votre branche (se référer à la section correspondante)
-  
+
 Une fois fais, toujours sur la branche maBranche, exécuter la commande :
 
 ### `git push`
