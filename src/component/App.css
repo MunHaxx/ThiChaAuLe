@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,9 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
+
+.bonjour {color:red; font-size:30px; background-color: blue;}
+.carréDansLaxe {background-color: green; width:200px; height:200px; display: flex; justify-content: center; align-items: center;}
+.bulbizarre {width:150px; height:150px;}
+.containerBulbizarre {display: flex}
