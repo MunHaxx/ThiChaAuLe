@@ -69,3 +69,5 @@ Une fois fais, toujours sur la branche maBranche, exécuter la commande :
 ### `git push`
 
 A finir pour faire une PR
+
+Ensuite 
