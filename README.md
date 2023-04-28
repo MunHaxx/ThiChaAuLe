@@ -19,6 +19,12 @@ Et pour les utilisateurs windows utiliser :
 ### `startPauvre.bat`
 (En vrai c'est pas sûr que ça marche, donc gaffe, il faudra qu'on revoit ça.) 
 
+<br>
+
+Cependant, si on veut juste lancer l'application front, ça peut se faire en exécutant la commande suivante :
+
+### `npm start` 
+
 <br><br>
 
 ## Comment coder ?
