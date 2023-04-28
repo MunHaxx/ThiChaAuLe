@@ -68,6 +68,4 @@ Une fois fais, toujours sur la branche maBranche, exécuter la commande :
 
 ### `git push`
 
-A finir pour faire une PR
-
-Ensuite 
+Vous allez avoir une erreur lors de votre premier push sur une nouvelle branche. Copier la commande git push ... qu'on vous propose, et coller là pour l'exécuter, ça va push correctement votre code.
