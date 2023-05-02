@@ -12,7 +12,7 @@ function App() {
         </div>
 
         <div className="descriptionBulbizarre">
-          <h1>HELLO WORLD</h1>
+          <h1>Cha t'es nul </h1>
           <p>Bulbizarre est un pokémon de la première gen de type plante</p>
         </div>
       </div>
