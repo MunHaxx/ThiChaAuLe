@@ -6,7 +6,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* <div>My name is Noah</div> */}
       <div className="bonjour">Bonjour à tous</div>
       <div className="containerBulbizarre">
         <div className='carréDansLaxe'>
