@@ -1,12 +1,11 @@
 import React from 'react';
-import './App.css';
-import Formulaire from './Formulaire';
+import Formulaire from '../component/Formulaire';
 
-function App() {
+function Home() {
 
   return (
-    <div className="App">
-      <div className="bonjour">Bonjour à tous</div>
+    <div className="Home">
+        <div className="bonjour">Bonjour à tous</div>
       <div className="containerBulbizarre">
         <div className='carréDansLaxe'>
           <img alt="" className="bulbizarre" src='https://www.pokepedia.fr/images/thumb/e/ef/Bulbizarre-RFVF.png/250px-Bulbizarre-RFVF.png' />
@@ -22,10 +21,9 @@ function App() {
       <br />
       <br />
       <br />
-      <Formulaire />
-      
+      <Formulaire /> 
     </div>
   );
 }
 
-export default App;
+export default Home;
