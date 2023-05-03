@@ -10,17 +10,24 @@ Ensuite, vous pouvez entrer dans le répertoire "ThiChaAuLe" et installer les pa
 
 ### `npm install`
 
-Enfin, pour lancer le projet, il suffit de lancer le script Bash présent dans le répertoire. Pour les utilisateurs de Mac, lancer 
+<br><br>
+
+## Comment lancer le projet ?
+Pour lancer le projet, il suffit de lancer le script Bash présent dans le répertoire. 
+
+Pour les utilisateurs de Mac, le script permettra de mettre à jour et lancer le projet tout seul. Executer donc la commande :
 
 ### `./startRiche.sh`
 
-Et pour les utilisateurs windows utiliser :
+Et pour les utilisateurs windows, le script permet seulement de mettre à jour le front :
+### `.\startPauvre.cmd`
 
-### `startPauvre.bat`
-(En vrai c'est pas sûr que ça marche, donc gaffe, il faudra qu'on revoit ça.) 
+Vous pouvez donc executer la commande précédente, puis lancer le projet comme vous le souhaitez, soit avec la commande "flask run", soit avec pyCharm.
 
-<br>
 
+<br><br>
+
+## Comment lancer seulement le front du projet ?
 Cependant, si on veut juste lancer l'application front, ça peut se faire en exécutant la commande suivante :
 
 ### `npm start` 
