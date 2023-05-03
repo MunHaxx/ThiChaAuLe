@@ -15,7 +15,7 @@ function App() {
 
         <div className="descriptionBulbizarre">
           <h1>HELLO WORLD</h1>
-          <p>Bulbizarre est un pokémon de la première gen de type plante</p>
+          <p>Bulbizarre est un pokémon de la première gen de type plante</p> 
         </div>
       </div>
       <a href="https://eu.shop.battle.net/fr-fr">Battle net</a>
