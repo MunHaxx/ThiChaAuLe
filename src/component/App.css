@@ -41,3 +41,4 @@
 .carréDansLaxe {background-color: green; width:200px; height:200px; display: flex; justify-content: center; align-items: center;}
 .bulbizarre {width:150px; height:150px;}
 .containerBulbizarre {display: flex}
+.inputContainer {display: flex; flex-direction: column; width:200px}

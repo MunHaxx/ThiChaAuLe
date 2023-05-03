@@ -1,4 +1,6 @@
+import React from 'react';
 import './App.css';
+import Formulaire from './Formulaire';
 
 function App() {
 
@@ -17,6 +19,12 @@ function App() {
         </div>
       </div>
       <a href="https://eu.shop.battle.net/fr-fr">Battle net</a>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Formulaire />
       
     </div>
   );
