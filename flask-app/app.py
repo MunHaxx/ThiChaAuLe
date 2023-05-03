@@ -13,12 +13,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/api/data')
-def get_data():
-    data = {'key': 'value'}
-    return jsonify(data)
-
-
 # Page d'inscription pour les utilisateurs
 @app.route('/register', methods=['GET', 'POST'])
 def register():
