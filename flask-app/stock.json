@@ -1,0 +1,19 @@
+{
+  "stocks": {
+    "BoxBoulangerie": {
+      "quantity": 10,
+      "tarifs": 20,
+      "promotion": 0
+    },
+    "BoxDecouverte": {
+      "quantity": 30,
+      "tarifs":30,
+      "promotion": 0
+    },
+    "BoxVinFrom": {
+      "quantity": 20,
+      "tarifs":39,
+      "promotion": 10
+    }
+  }
+}
