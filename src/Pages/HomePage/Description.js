@@ -14,7 +14,7 @@ function Description() {
             <li>La France a porté de main</li>
             <li>Délicieux repas garantis !</li>
           </ul>
-          <button>PARCOURIR LES BOXS !</button>
+          <button id='parcourir' type='search' value='parcourir'>PARCOURIR LES BOXS !</button>
         </div>
     </div>
   )

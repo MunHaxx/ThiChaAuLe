@@ -27,7 +27,7 @@
     margin-bottom: 10px;
 }
 
-button {
+#parcourir {
     background-color: #0A3D62;
     color: white;
     padding: 15px 50px;
@@ -41,6 +41,6 @@ button {
     transition: transform .2s;
 }
 
-button:hover{
+#parcourir:hover{
     transform: scale(1.1);
 }
