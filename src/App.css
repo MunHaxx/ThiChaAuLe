@@ -42,9 +42,3 @@
 .bulbizarre {width:150px; height:150px;}
 .containerBulbizarre {display: flex}
 .inputContainer {display: flex; flex-direction: column; width:200px}
-
-
-.Header{ text-align: center; border-bottom: solid 1px grey;}
-.Header ul{ list-style: none; padding:0px; }
-.Header ul li{ display: inline-block; margin-right:20px;}
-.Header ul li a{ text-decoration: none; color: black; }

@@ -14,7 +14,7 @@ app.secret_key  = 'my super secret key'.encode('utf8')
 stripe.api_key = "secret_key"
 
 
-# acceuil
+# accueil
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -38,7 +38,7 @@ def get_data():
 def userdashboard(user):
 
     with open("users.json", "r") as f:
-        # on récupére les users sous forme de dico
+        # on récupère les users sous forme de dico
         data = json.load(f)
 
     if data["users"][user]["panier"]["Vide"] == "False":
@@ -78,7 +78,7 @@ def register():
         password = request.form['password']
         print(password)
 
-        # on ajoute le nouvelle user au fichier json des users
+        # on ajoute le nouvel user au fichier json des users
         user = {
             id: {
                 "id": id,
@@ -88,9 +88,9 @@ def register():
             }
         }
 
-        # on récupére l'ancien json pour le mettre à jour
+        # on récupère l'ancien json pour le mettre à jour
         with open("users.json", "r") as f:
-            # on récupére les users sous forme de dico
+            # on récupère les users sous forme de dico
             data = json.load(f)
             # on rajoute le new user au dico
             data["users"].update(user)
@@ -116,9 +116,9 @@ def login():
         id = request.form['id']
         password = request.form['password']
 
-        # on récupére le json des users
+        # on récupère le json des users
         with open("users.json", "r") as f:
-            # on récupére les users sous forme de dico
+            # on récupère les users sous forme de dico
             data = json.load(f)
 
         # pour chacun de mes user
@@ -129,7 +129,7 @@ def login():
                 if data["users"][user]['password'] == password:
                     # je crée la session associé au id (admin ou users)
                     session['id'] = id
-                    # je redirige vers le site web adapté à la personne connecter (admin ou users)
+                    # je redirige vers le site web adapté à la personne connecté (admin ou users)
                     return redirect(url_for('dashboard'))
         # si aucun user ne correspond on renvoi à la connexion et on indique que c'est incorrect
         return render_template('index.html', error="Email ou mot de passe incorrect")
