@@ -1,11 +1,11 @@
-.header {
+.Header {
     position: sticky;
     top: 0px;
     border-bottom:  none;
     background-color: #0A3D62;
 }
 
-.header .container { 
+.Header .container { 
     display: flex;
     list-style: none; 
     padding: 20px; 
@@ -13,17 +13,17 @@
     justify-content: space-between;
 }
 
-.header .home  { 
+.Header .home  { 
     display: inline; 
     margin-left: 20px;
 }
 
-.header .panier  { 
+.Header .panier  { 
     display: inline;
     margin-right: 20px;
 }
 
-.header div a {
+.Header div a {
     text-decoration: none; 
     color: white;
     font-family: 'Roboto Slab', Serif;
@@ -32,6 +32,6 @@
     letter-spacing: 2px;
 }
 
-.header .home a {
+.Header .home a {
     margin-right: 60px;
 }
