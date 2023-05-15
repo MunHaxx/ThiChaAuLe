@@ -1,0 +1,36 @@
+.header {
+    position: sticky;
+    top: 0px;
+    border-bottom:  none;
+    background-color: #0A3D62;
+}
+
+.header .container { 
+    display: flex;
+    list-style: none; 
+    padding: 20px; 
+    margin: 0px;
+    justify-content: space-between;
+}
+
+.header .home  { 
+    display: inline; 
+    margin-left: 20px;
+}
+
+.header .panier  { 
+    display: inline;
+    margin-right: 20px;
+}
+
+.header div a {
+    text-decoration: none; 
+    color: white;
+    font-family: 'Roboto Slab', Serif;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.header .home a {
+    margin-right: 60px;
+}
