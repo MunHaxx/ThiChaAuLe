@@ -1,11 +1,16 @@
-from flask import Flask, jsonify, render_template,request,redirect,url_for,session
-import json
-import paypalrestsdk
-import bcrypt
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session
 import stripe
+from pymongo import MongoClient
 
-# ça manque de front par ici
+# Se connecter à la base de données MongoDB
+client = MongoClient('mongodb://localhost:27017/')
+db = client.commerce_db
 
+# Définir la collection 'users'
+users_collection = db['users']
+
+# Définir la collection 'stocks'
+stocks_collection = db['stocks']
 
 app = Flask(__name__, static_folder='./build/static', template_folder='./build')
 app.secret_key = 'my super secret key'.encode('utf8')
@@ -19,44 +24,57 @@ stripe.api_key = "secret_key"
 def index():
     return render_template('index.html')
 
-@app.route('/api/data')
-def get_data():
-    with open("stock.json", "r") as f:
-            # on récupére les users sous forme de dico
-            data = json.load(f)
-    return jsonify(data)
 
-# @app.route('/api/data')
-# def get_data():
-#     with open("stock.json", "r") as f:
-#         data = json.load(f)
-
-#     return jsonify(data)
-
-# tableau de bord user avec panier ect
-@app.route('/user/user=<user>')
+# tableau de bord user avec panier etc.
+@app.route('/userdashboard/<user>')
 def userdashboard(user):
+    # Récupérer les données de l'utilisateur depuis la collection 'users'
+    user_data = users_collection.find_one({"users_list.user": {user: {"$exists": True}}})
 
-    with open("users.json", "r") as f:
-        # on récupère les users sous forme de dico
-        data = json.load(f)
+    if user_data and user_data["users_list"]["user"][user]["panier"]["Vide"] == "False":
+        return jsonify(user_data["users_list"]["user"][user]["panier"]["content"])
 
-    if data["users"][user]["panier"]["Vide"] == "False":
-        return data["users"][user]["panier"]
+    return render_template('index.html')
+
+@app.route('/AddCart/<product>')
+def AddCart(product):
+    if session['type'] == "user":
+        # Récupérer l'utilisateur actuel depuis la collection 'users'
+        user = users_collection.find_one({"users_list.user": {session['id']: {"$exists": True}}})
+
+        if user:
+            # Mettre à jour le panier de l'utilisateur
+            if user["users_list"]["user"][session['id']]["panier"]["Vide"] == "True":
+                user["users_list"]["user"][session['id']]["panier"]["Vide"] = "False"
+                user["users_list"]["user"][session['id']]["panier"]["content"][product] = 1
+            else:
+                if product in user["users_list"]["user"][session['id']]["panier"]["content"]:
+                    user["users_list"]["user"][session['id']]["panier"]["content"][product] += 1
+                else:
+                    user["users_list"]["user"][session['id']]["panier"]["content"][product] = 1
+
+            # Mettre à jour les données de l'utilisateur dans la collection 'users'
+            users_collection.update_one(
+                {"users_list.user": {session['id']: {"$exists": True}}},
+                {"$set": {"users_list.user." + session['id']: user["users_list"]["user"][session['id']]}}
+            )
+
+    return render_template("index.html")
 
 
-# page de paiement
+# Page de paiement
 @app.route("/payment", methods=["POST"])
-def payment(amount):
+def payment():
+    amount = 100  # Valeur à adapter en fonction de la logique de paiement
     customer = stripe.Customer.create(
-        email = request.form["mail"],
+        email=request.form["mail"],
         source=request.form["token"]
     )
     charge = stripe.Charge.create(
-        customer= customer.id,
+        customer=customer.id,
         amount=amount,
         currency="usd",
-        description=" Shop paiement "
+        description ="Shop paiement"
     )
     return redirect(url_for("payment_succes"))
 
@@ -77,90 +95,66 @@ def register():
         password = request.form['password']
        # print(password)
 
-        # on ajoute le nouvel user au fichier json des users
-        user = {
-            id: {
-                "id": id,
-                "password": password ,
-                "panier": { "Vide": "True"
-                }
+        # Créer le nouvel utilisateur
+        new_user = {
+
+            id : {
+            "id": id,
+            "password": password,
+            "panier": {
+                "Vide": "True",
+                "content": {}
+            }
             }
         }
 
-        # on récupère l'ancien json pour le mettre à jour
-        with open("users.json", "r") as f:
-            # on récupère les users sous forme de dico
-            data = json.load(f)
-            # on rajoute le new user au dico
-            data["users_list"]["user"].update(user)
+        # Insérer le nouvel utilisateur dans la collection 'users'
+        # Récupérer les données actuelles dans la collection 'users'
+        users_data = users_collection.find_one({})
 
-            # on écrase le fichier user avec les users + le new user
-            with open("users.json", "w") as f:
-                f.write("")
-                json.dump(data, f)
+        # Mettre à jour les données avec le nouvel utilisateur
+        users_data["users_list"]["user"].update(new_user)
 
+        # Mettre à jour le document dans la collection 'users' avec les données mises à jour
+        users_collection.replace_one({}, users_data)
 
-        # on redirige vers la page de connection
+        # on redirige vers la page de connexion
         return redirect(url_for('login'))
 
-    # on attend que le formulaire sois rempli
+    # on attend que le formulaire soit rempli
     return render_template('index.html')
 
 
-# Page de connexion pour les utilisateurs
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # si rempli le formulaire de connexion on récup des entrées
+    # si le formulaire de connexion est rempli, on récupère les entrées
     if request.method == 'POST':
         id = request.form['id']
         password = request.form['password']
 
-        # on récupère le json des users
-        with open("users.json", "r") as f:
-            # on récupère les users sous forme de dico
-            data = json.load(f)
+        user = users_collection.find_one({
+            "$or": [
+                {"users_list.user." + id + ".password": password},
+                {"users_list.admin." + id + ".password": password}
+            ]
+        })
 
-        # pour chacun de mes user
-        if id in data["users_list"]["user"]:
-            # si c'est le user qui se connecte
-            user = id
-            # si le mdp est correct
-            if data["users_list"]["user"][user]['password'] == password:
-                # je crée la session associé au id (admin ou users)
-                session['id'] = id
-                session['type'] = "user"
+        if user:
+            # si le mot de passe est correct
+            session['id'] = id
+            session['type'] = 'admin' if user['users_list'].get('admin', {}).get(id) else 'user'
 
-                # je redirige vers le site web adapté à la personne connecter (user)
-                return redirect(url_for('dashboard'))
-
-        elif id in data["users_list"]["admin"]:
-            user = id
-            # si admin
-            if data["users_list"]["admin"][user]['password'] == password:
-                # je crée la session associé au id (admin ou users)
-
-                session['id'] = id
-                session['type'] = "admin"
-                # je redirige vers le site web adapté à la personne connecter (admin)
-                print("Vous êtes connecté en tant que ", session['id'])
-                return redirect(url_for('dashboard'))
+            # Rediriger vers le site web adapté à la personne connectée
+            return redirect(url_for('userdashboard', user=id))
 
         else:
-            # ERREUR
-
-            # si aucun user ne correspond on renvoi à la connexion et on indique que c'est incorrect
+            # Si l'utilisateur n'existe pas ou le mot de passe est incorrect
+            print("incorrect")
             return render_template('index.html', error="Email ou mot de passe incorrect")
 
-    # on attend que le formulaire sois remplis
+    # On attend que le formulaire soit rempli
     return render_template('index.html')
 
-
-# Déconnexion de l'utilisateur
-@app.route('/logout')
-def logout():
-    # si on se déco on détruit la session et retourne à l'acceuil
-    session.clear()
-    return redirect(url_for('/'))
 
 
 # tableau de bord admin avec gestion des users et commandes
@@ -214,7 +208,7 @@ def deleteuser(usertodel):
 def dashboard():
     # on verifie que le user est co
     if 'id' in session:
-        if session['type'] == "admin":
+        if 'id' == "admin":
             return redirect(url_for('admin'))
         else :
             return redirect(url_for('userdashboard' , user = id ))
@@ -223,18 +217,12 @@ def dashboard():
         return redirect(url_for('login'))
 
 
-# tableau de bord user avec panier ect
-@app.route('/userdashboard/<user>')
-def userdashboard(user):
-
-    with open("users.json", "r") as f:
-        # on récupère les users sous forme de dico
-        data = json.load(f)
-
-    #if data["users_list"][user]["panier"]["Vide"] == "False":
-     #   return data["users"][user]["panier"]
-
-    return render_template('index.html')
+# Déconnexion de l'utilisateur
+@app.route('/logout')
+def logout():
+    # si on se déco on détruit la session et retourne à l'acceuil
+    session.clear()
+    return redirect(url_for('/'))
 
 
 # lancement de l'appli flask
