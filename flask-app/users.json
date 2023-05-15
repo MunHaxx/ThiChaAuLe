@@ -1,8 +1,1 @@
-{
-  "users": {
-    "admin": {
-      "id": "admin",
-      "password": "123"
-    }
-  }
-}
+{"users": {"admin": {"id": "admin", "password": "admin", "panier": {"Vide": "True"}}}}

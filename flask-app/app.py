@@ -19,6 +19,20 @@ stripe.api_key = "secret_key"
 def index():
     return render_template('index.html')
 
+@app.route('/api/data')
+def get_data():
+    with open("stock.json", "r") as f:
+            # on récupére les users sous forme de dico
+            data = json.load(f)
+    return jsonify(data)
+
+# @app.route('/api/data')
+# def get_data():
+#     with open("stock.json", "r") as f:
+#         data = json.load(f)
+
+#     return jsonify(data)
+
 # tableau de bord user avec panier ect
 @app.route('/user/user=<user>')
 def userdashboard(user):
