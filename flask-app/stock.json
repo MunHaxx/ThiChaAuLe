@@ -1,16 +1,19 @@
 {
   "stocks": {
-    "BoxBoulangerie": {
+    "BoxBoulang": {
+      "name": "La box Boulangerie",
       "quantity": 10,
       "tarifs": 20,
       "promotion": 0
     },
     "BoxDecouverte": {
+      "name": "La box Découverte",
       "quantity": 30,
       "tarifs":30,
       "promotion": 0
     },
     "BoxVinFrom": {
+      "name": "La box Vin & Fromage",
       "quantity": 20,
       "tarifs":39,
       "promotion": 10

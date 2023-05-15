@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, render_template,request,redirect,url_for,session
 import json
+import paypalrestsdk
+import bcrypt
 import stripe
 
 # ça manque de front par ici
@@ -16,6 +18,31 @@ stripe.api_key = "secret_key"
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/api/data')
+def get_data():
+    with open("stock.json", "r") as f:
+            # on récupére les users sous forme de dico
+            data = json.load(f)
+    return jsonify(data)
+
+# @app.route('/api/data')
+# def get_data():
+#     with open("stock.json", "r") as f:
+#         data = json.load(f)
+
+#     return jsonify(data)
+
+# tableau de bord user avec panier ect
+@app.route('/user/user=<user>')
+def userdashboard(user):
+
+    with open("users.json", "r") as f:
+        # on récupère les users sous forme de dico
+        data = json.load(f)
+
+    if data["users"][user]["panier"]["Vide"] == "False":
+        return data["users"][user]["panier"]
 
 
 # page de paiement
@@ -48,9 +75,9 @@ def register():
     if request.method == 'POST':
         id = request.form['id']
         password = request.form['password']
-        # TEST print(password)
+       # print(password)
 
-        # on ajoute le nouvelle user au fichier json des users
+        # on ajoute le nouvel user au fichier json des users
         user = {
             id: {
                 "id": id,
@@ -60,9 +87,9 @@ def register():
             }
         }
 
-        # on récupére l'ancien json pour le mettre à jour
+        # on récupère l'ancien json pour le mettre à jour
         with open("users.json", "r") as f:
-            # on récupére les users sous forme de dico
+            # on récupère les users sous forme de dico
             data = json.load(f)
             # on rajoute le new user au dico
             data["users_list"]["user"].update(user)
@@ -88,9 +115,9 @@ def login():
         id = request.form['id']
         password = request.form['password']
 
-        # on récupére le json des users
+        # on récupère le json des users
         with open("users.json", "r") as f:
-            # on récupére les users sous forme de dico
+            # on récupère les users sous forme de dico
             data = json.load(f)
 
         # pour chacun de mes user

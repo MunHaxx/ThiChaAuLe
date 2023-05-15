@@ -1,0 +1,37 @@
+.Header {
+    position: sticky;
+    top: 0px;
+    border-bottom:  none;
+    background-color: #0A3D62;
+}
+
+.Header .container { 
+    display: flex;
+    list-style: none; 
+    padding: 20px; 
+    margin: 0px;
+    justify-content: space-between;
+}
+
+.Header .home  { 
+    display: inline; 
+    margin-left: 20px;
+}
+
+.Header .panier  { 
+    display: inline;
+    margin-right: 20px;
+}
+
+.Header div a {
+    text-decoration: none; 
+    color: white;
+    font-family: 'Roboto Slab', Serif;
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.Header .home a {
+    margin-right: 60px;
+}
