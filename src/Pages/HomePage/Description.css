@@ -1,2 +1,46 @@
-.Description {display: flex; height:calc(100vh - 73px); background-color: #E55039; color: white}
-.Description img {height:100%}
+.Description {
+    display: flex; 
+    height:calc(100vh - 73px); 
+    background-color: #E55039; 
+    color: white;
+}
+.Description img {
+    height:100%
+}
+
+.right-part-container{
+    margin-top: 250px;
+    margin-left: 75px;
+}
+
+.in-a-box{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.Description ul {
+    font-family: 'Inter', sans-serif;
+}
+
+.Description ul li {
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #0A3D62;
+    color: white;
+    padding: 15px 50px;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    margin-top: 50px;
+    border-radius: 30px;
+    border: none;
+    transition: transform .2s;
+}
+
+button:hover{
+    transform: scale(1.1);
+}
