@@ -1,8 +1,1 @@
-{
-  "users": {
-    "admin": {
-      "id": "admin",
-      "password": "123"
-    }
-  }
-}
+{"users_list": {"admin": {}, "user": {"fzef": {"id": "fzef", "password": "fezsfed", "panier": {"Vide": "True"}}, "aaa": {"id": "aaa", "password": "aaa", "panier": {"Vide": "True"}}}}}
