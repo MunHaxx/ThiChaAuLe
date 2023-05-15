@@ -23,6 +23,201 @@ def index():
     return render_template('index.html')
 
 
+# --------------------------------------- Gestion des users ---------------------------------------
+
+# Créer un nouvel utilisateur
+def add_user(id, password, type):
+    users_data = users_collection.find_one({})  # Récupérer les données actuelles dans la collection 'users'
+    if id not in users_data['users_list'].get('admin', {}) and id not in users_data['users_list'].get('user', {}):
+        new_user = {
+
+            id: {
+                "id": id,
+                "password": password,
+                "panier": {
+                    "Vide": "True",
+                    "content": {}
+                }
+            }
+        }
+
+        if type == "user":
+            users_data["users_list"]["user"].update(new_user)  # MAJ la collection avec le nouvel utilisateur
+        elif type == "admin":
+            users_data["users_list"]["admin"].update(new_user)
+        else:
+            print("Erreur, le type d'utilisateur n'est pas reconnu")
+        users_collection.replace_one({}, users_data)  # MAJ la BDD avec les nouvelles données
+
+    else:
+        print("L'utilisateur existe déjà")
+
+# Supprime un utilisateur de la base
+@app.route('/delete_user/<usertodel>')
+def delete_user(usertodel):
+    if session['type'] == "admin" or usertodel == session['id']:
+
+        # Superviseur est un utilisateur intouchable
+        if usertodel == "superviseur":
+            print("On ne peut pas supprimer le superviseur")
+
+        else:
+
+            users_data = users_collection.find_one({})
+            # Vérifie si l'utilisateur à supprimer est un user ou un admin
+            if usertodel in users_data['users_list']['admin']:
+                del users_data['users_list']['admin'][usertodel]
+                users_collection.replace_one({}, users_data) # MAJ de la collection
+                #print("On a supprimé l'utilisateur", usertodel)
+
+            elif usertodel in users_data['users_list']['user']:
+                del users_data['users_list']['user'][usertodel]
+                users_collection.replace_one({}, users_data)  # MAJ de la collection
+                #print("On a supprimé l'utilisateur", usertodel)
+            else:
+                print("L'utilisateur n'existe pas")
+
+            if usertodel == session['id']:
+                print("Vous supprimez votre propre compte")
+                return redirect(url_for('logout'))
+
+    else:
+        # ERREUR !!!!
+        print("Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
+
+    return render_template('index.html')
+
+# Page d'inscription pour les utilisateurs
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    # si on envoi des données (formulaire)
+    if request.method == 'POST':
+        id = request.form['id']
+        password = request.form['password']
+        # print(password)
+
+        add_user(id, password, "user")
+
+        # on redirige vers la page de connexion
+        return redirect(url_for('login'))
+
+    # Sinon on attend que le formulaire soit rempli
+    return render_template('index.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # si le formulaire de connexion est rempli, on récupère les entrées
+    if request.method == 'POST':
+        id = request.form['id']
+        password = request.form['password']
+
+        user = users_collection.find_one({
+            "$or": [
+                {"users_list.user." + id + ".password": password},
+                {"users_list.admin." + id + ".password": password}
+            ]
+        })
+
+        if user:
+            # si le mot de passe est correct
+            session['id'] = id
+            session['type'] = 'admin' if user['users_list'].get('admin', {}).get(id) else 'user'
+
+            # Rediriger vers le site web adapté à la personne connectée
+            return redirect(url_for('userdashboard', user=id))
+
+        else:
+            # Si l'utilisateur n'existe pas ou le mot de passe est incorrect
+            print("L'identifiant ou le mot de passe sont incorrects")
+            return render_template('index.html', error="Email ou mot de passe incorrect")
+
+    # On attend que le formulaire soit rempli
+    return render_template('index.html')
+
+
+# Déconnexion de l'utilisateur
+@app.route('/logout')
+def logout():
+    # si on se déco on détruit la session et retourne à l'acceuil
+    session.clear()
+    #return redirect(url_for('/'))
+    return render_template('index.html')
+
+
+# Passe un utilisateur en administrateur (+ de droits)
+@app.route('/user_to_admin/<user>')
+def user_to_admin(user):
+    if session['type'] == "admin":
+        users_data = users_collection.find_one({})
+
+        # Superviseur est un utilisateur intouchable
+        if user == "superviseur":
+            print("On ne peut pas modifier le superviseur")
+
+        # Déjà admin
+        elif user in users_data['users_list']['admin']:
+            print(user, " est déjà administrateur")
+
+        # Modif de l'user
+        elif user in users_data['users_list']['user']:
+            usertemp = users_data['users_list']['user'].get(user, {})
+            print(usertemp.get('id'))
+            delete_user(user)
+            add_user(usertemp.get('id'), usertemp.get('password'), "admin")
+            print(user, "est maintenant administrateur")
+
+        # Pas de user
+        else:
+            print("L'utilisateur n'existe pas")
+
+    else:
+        # ERREUR !!!!
+        print("Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
+
+    return render_template('index.html')
+
+
+# Passe un utilisateur en administrateur (+ de droits)
+@app.route('/admin_to_user/<user>')
+def admin_to_user(user):
+    if session['type'] == "admin":
+        users_data = users_collection.find_one({})
+
+        # Superviseur est un utilisateur intouchable
+        if user == "superviseur":
+            print("On ne peut pas modifier le superviseur")
+
+        # Déjà user
+        elif user in users_data['users_list']['user']:
+            print(user, " est déjà utilisateur")
+
+        # Modif de l'user
+        elif user in users_data['users_list']['admin']:
+            usertemp = users_data['users_list']['admin'].get(user, {})
+            #print(usertemp.get('id'))
+            delete_user(user)
+            add_user(usertemp.get('id'), usertemp.get('password'), "user")
+            print(user, "est maintenant utilisateur")
+
+        # Pas de user
+        else:
+            print("L'utilisateur n'existe pas")
+
+    else:
+        # ERREUR !!!!
+        print("Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
+
+    return render_template('index.html')
+
+
+# --------------------------------------- Tableau de bord ---------------------------------------
+
+# tableau de bord admin avec gestion des users et commandes
+@app.route('/admin')
+def admin():
+    return render_template('index.html')
+
 # tableau de bord user avec panier etc.
 @app.route('/userdashboard/<user>')
 def userdashboard(user):
@@ -34,6 +229,22 @@ def userdashboard(user):
 
     return render_template('index.html')
 
+
+# Tableau de bord
+@app.route('/dashboard')
+def dashboard():
+    # on verifie que le user est co
+    if 'id' in session:
+        if 'id' == "admin":
+            return redirect(url_for('admin'))
+        else:
+            return redirect(url_for('userdashboard', user=id))
+    # sinon on lui dis de se co
+    else:
+        return redirect(url_for('login'))
+
+
+# --------------------------------------- Gestion des achats ---------------------------------------
 
 @app.route('/AddCart/<product>')
 def AddCart(product):
@@ -84,138 +295,7 @@ def payment_succes():
     render_template("index.html")
 
 
-# Page d'inscription pour les utilisateurs
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    # si on envoi des données (formulaire)
-    if request.method == 'POST':
-        id = request.form['id']
-        password = request.form['password']
-        # print(password)
-
-        # Créer le nouvel utilisateur
-        new_user = {
-
-            id: {
-                "id": id,
-                "password": password,
-                "panier": {
-                    "Vide": "True",
-                    "content": {}
-                }
-            }
-        }
-
-        # Insérer le nouvel utilisateur dans la collection 'users'
-        # Récupérer les données actuelles dans la collection 'users'
-        users_data = users_collection.find_one({})
-
-        # Mettre à jour les données avec le nouvel utilisateur
-        users_data["users_list"]["user"].update(new_user)
-
-        # Mettre à jour le document dans la collection 'users' avec les données mises à jour
-        users_collection.replace_one({}, users_data)
-
-        # on redirige vers la page de connexion
-        return redirect(url_for('login'))
-
-    # on attend que le formulaire soit rempli
-    return render_template('index.html')
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    # si le formulaire de connexion est rempli, on récupère les entrées
-    if request.method == 'POST':
-        id = request.form['id']
-        password = request.form['password']
-
-        user = users_collection.find_one({
-            "$or": [
-                {"users_list.user." + id + ".password": password},
-                {"users_list.admin." + id + ".password": password}
-            ]
-        })
-
-        if user:
-            # si le mot de passe est correct
-            session['id'] = id
-            session['type'] = 'admin' if user['users_list'].get('admin', {}).get(id) else 'user'
-
-            # Rediriger vers le site web adapté à la personne connectée
-            return redirect(url_for('userdashboard', user=id))
-
-        else:
-            # Si l'utilisateur n'existe pas ou le mot de passe est incorrect
-            print("incorrect")
-            return render_template('index.html', error="Email ou mot de passe incorrect")
-
-    # On attend que le formulaire soit rempli
-    return render_template('index.html')
-
-
-# tableau de bord admin avec gestion des users et commandes
-@app.route('/admin')
-def admin():
-    return render_template('index.html')
-
-
-# tableau de bord user avec panier ect
-@app.route('/delete_user/<usertodel>')
-def deleteuser(usertodel):
-    print("Vous êtes ", session['id'])
-    if session['type'] == "admin":
-        print("session['type'] == admin")
-
-        # Superviseur est un utilisateur intouchable
-        if usertodel == "superviseur":
-            print("On ne peut pas suprimer le superviseur")
-
-        else:
-            # Récupère les données de la base
-            users_data = users_collection.find_one({})
-            # Vérifie si l'utilisateur à supprimé est un user ou un admin
-            if usertodel in users_data['users_list']['admin']:
-                #del user['users_list']['admin'][usertodel]
-                del users_data['users_list']['admin'][usertodel]
-                users_collection.replace_one({}, users_data) # MAJ de la collection
-                print("On a supprimé l'utilisateur ", usertodel)
-
-            elif usertodel in users_data['users_list']['user']:
-                del users_data['users_list']['user'][usertodel]
-                users_collection.replace_one({}, users_data)  # MAJ de la collection
-                print("On a supprimé l'utilisateur ", usertodel)
-            else:
-                print("L'utilisateur n'existe pas")
-
-    else:
-        # ERREUR !!!!
-        print("Erreur : vous n'êtes pas admin")
-
-    return render_template('index.html')
-
-
-# Tableau de bord
-@app.route('/dashboard')
-def dashboard():
-    # on verifie que le user est co
-    if 'id' in session:
-        if 'id' == "admin":
-            return redirect(url_for('admin'))
-        else:
-            return redirect(url_for('userdashboard', user=id))
-    # sinon on lui dis de se co
-    else:
-        return redirect(url_for('login'))
-
-
-# Déconnexion de l'utilisateur
-@app.route('/logout')
-def logout():
-    # si on se déco on détruit la session et retourne à l'acceuil
-    session.clear()
-    return redirect(url_for('/'))
-
+# --------------------------------------- Programme principal ---------------------------------------
 
 # lancement de l'appli flask
 if __name__ == '__main__':
