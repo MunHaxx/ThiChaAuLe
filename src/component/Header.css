@@ -27,8 +27,9 @@
     text-decoration: none; 
     color: white;
     font-family: 'Roboto Slab', Serif;
-    font-size: x-large;
+    font-size: 25px;
     font-weight: bold;
+    letter-spacing: 2px;
 }
 
 .header .home a {
