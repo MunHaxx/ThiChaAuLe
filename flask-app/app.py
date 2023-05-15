@@ -6,10 +6,8 @@ from pymongo import MongoClient
 client = MongoClient('mongodb://localhost:27017/')
 db = client.commerce_db
 
-# Définir la collection 'users'
+# Définir les collections
 users_collection = db['users']
-
-# Définir la collection 'stocks'
 stocks_collection = db['stocks']
 
 app = Flask(__name__, static_folder='./build/static', template_folder='./build')
@@ -35,6 +33,7 @@ def userdashboard(user):
         return jsonify(user_data["users_list"]["user"][user]["panier"]["content"])
 
     return render_template('index.html')
+
 
 @app.route('/AddCart/<product>')
 def AddCart(product):
@@ -74,7 +73,7 @@ def payment():
         customer=customer.id,
         amount=amount,
         currency="usd",
-        description ="Shop paiement"
+        description="Shop paiement"
     )
     return redirect(url_for("payment_succes"))
 
@@ -88,23 +87,22 @@ def payment_succes():
 # Page d'inscription pour les utilisateurs
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-
     # si on envoi des données (formulaire)
     if request.method == 'POST':
         id = request.form['id']
         password = request.form['password']
-       # print(password)
+        # print(password)
 
         # Créer le nouvel utilisateur
         new_user = {
 
-            id : {
-            "id": id,
-            "password": password,
-            "panier": {
-                "Vide": "True",
-                "content": {}
-            }
+            id: {
+                "id": id,
+                "password": password,
+                "panier": {
+                    "Vide": "True",
+                    "content": {}
+                }
             }
         }
 
@@ -156,7 +154,6 @@ def login():
     return render_template('index.html')
 
 
-
 # tableau de bord admin avec gestion des users et commandes
 @app.route('/admin')
 def admin():
@@ -169,36 +166,31 @@ def deleteuser(usertodel):
     print("Vous êtes ", session['id'])
     if session['type'] == "admin":
         print("session['type'] == admin")
+
+        # Superviseur est un utilisateur intouchable
         if usertodel == "superviseur":
-            # ERREUR
             print("On ne peut pas suprimer le superviseur")
+
         else:
-            # ouvre JSON
-            with open("users.json", "r") as f:
-                # on récupère les users sous forme de dico
-                data = json.load(f)
+            # Récupère les données de la base
+            users_data = users_collection.find_one({})
+            # Vérifie si l'utilisateur à supprimé est un user ou un admin
+            if usertodel in users_data['users_list']['admin']:
+                #del user['users_list']['admin'][usertodel]
+                del users_data['users_list']['admin'][usertodel]
+                users_collection.replace_one({}, users_data) # MAJ de la collection
+                print("On a supprimé l'utilisateur ", usertodel)
 
-            # Recherche le user à suppr
-            if usertodel in data['users_list']["admin"]:
-                # Supprimer l'utilisateur
-                del data['users_list']["admin"][usertodel]
+            elif usertodel in users_data['users_list']['user']:
+                del users_data['users_list']['user'][usertodel]
+                users_collection.replace_one({}, users_data)  # MAJ de la collection
+                print("On a supprimé l'utilisateur ", usertodel)
+            else:
+                print("L'utilisateur n'existe pas")
 
-                # on écrase le fichier user avec les users - le user supprimé
-                with open("users.json", "w") as f:
-                    f.write("")
-                    json.dump(data, f)
-
-            elif usertodel in data['users_list']["user"]:
-                # Supprimer l'utilisateur
-                del data['users_list']["user"][usertodel]
-
-                # on écrase le fichier user avec les users - le user supprimé
-                with open("users.json", "w") as f:
-                    f.write("")
-                    json.dump(data, f)
     else:
         # ERREUR !!!!
-        print("erreur : vous n'êtes pas admin")
+        print("Erreur : vous n'êtes pas admin")
 
     return render_template('index.html')
 
@@ -210,8 +202,8 @@ def dashboard():
     if 'id' in session:
         if 'id' == "admin":
             return redirect(url_for('admin'))
-        else :
-            return redirect(url_for('userdashboard' , user = id ))
+        else:
+            return redirect(url_for('userdashboard', user=id))
     # sinon on lui dis de se co
     else:
         return redirect(url_for('login'))
