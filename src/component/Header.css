@@ -19,8 +19,8 @@
 }
 
 .Header .panier  { 
-    display: inline;
-    margin-right: 20px;
+    display: flex;
+    margin-right: 50px;
 }
 
 .Header div a {
@@ -34,4 +34,11 @@
 
 .Header .home a {
     margin-right: 60px;
+}
+
+.panier img{
+    margin-right: 10px;
+    color: white;
+    width: 40px;
+    height: auto;
 }

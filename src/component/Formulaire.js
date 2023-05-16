@@ -1,11 +1,13 @@
 import React from "react";
+import "./Formulaire.css"
+import imgLogin from "../images/imgLogin.jpg"
 
 
 function Formulaire() {
 
     return (
       <div className="containerFormulaire">
-        <h1>Formulaire</h1>
+        <div className="imgLogin"><img alt="" src={imgLogin} /></div>
 
         <div className="inputContainer">
           <form method="post">
