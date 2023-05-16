@@ -13,7 +13,7 @@
     border-top: 100px solid #0A3D62;
 }
 
-.container{
+.Temoignages .container{
     display: flex;
     justify-content: space-between;
     padding: 50px 75px 30px;
