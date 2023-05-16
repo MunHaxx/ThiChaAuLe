@@ -52,6 +52,7 @@ def add_user(id, password, type):
     else:
         print("L'utilisateur existe déjà")
 
+
 # Supprime un utilisateur de la base
 @app.route('/delete_user/<usertodel>')
 def delete_user(usertodel):
@@ -59,7 +60,7 @@ def delete_user(usertodel):
 
         # Superviseur est un utilisateur intouchable
         if usertodel == "superviseur":
-            print("On ne peut pas supprimer le superviseur")
+            return render_template('index.html',message="On ne peut pas supprimer le superviseur")
 
         else:
 
@@ -68,24 +69,24 @@ def delete_user(usertodel):
             if usertodel in users_data['users_list']['admin']:
                 del users_data['users_list']['admin'][usertodel]
                 users_collection.replace_one({}, users_data) # MAJ de la collection
-                #print("On a supprimé l'utilisateur", usertodel)
+                return render_template('index.html',message="On a supprimé l'utilisateur"+ usertodel)
 
             elif usertodel in users_data['users_list']['user']:
                 del users_data['users_list']['user'][usertodel]
                 users_collection.replace_one({}, users_data)  # MAJ de la collection
-                #print("On a supprimé l'utilisateur", usertodel)
-            else:
-                print("L'utilisateur n'existe pas")
+                return render_template('index.html',message="On a supprimé l'utilisateur"+ usertodel)
 
-            if usertodel == session['id']:
-                print("Vous supprimez votre propre compte")
+            elif usertodel == session['id']:
+                print("Vous suprimez votre propre compte")
                 return redirect(url_for('logout'))
+
+            else:
+                return render_template('index.html',message="L'utilisateur n'existe pas")
 
     else:
         # ERREUR !!!!
-        print("Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
+        return render_template('index.html',message="Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
 
-    return render_template('index.html')
 
 # Page d'inscription pour les utilisateurs
 @app.route('/register', methods=['GET', 'POST'])
@@ -248,28 +249,54 @@ def dashboard():
 
 @app.route('/AddCart/<product>')
 def AddCart(product):
+    print(session['id'])
+    print(session['type'])
     if session['type'] == "user":
-        # Récupérer l'utilisateur actuel depuis la collection 'users'
-        user = users_collection.find_one({"users_list.user": {session['id']: {"$exists": True}}})
 
-        if user:
-            # Mettre à jour le panier de l'utilisateur
-            if user["users_list"]["user"][session['id']]["panier"]["Vide"] == "True":
-                user["users_list"]["user"][session['id']]["panier"]["Vide"] = "False"
-                user["users_list"]["user"][session['id']]["panier"]["content"][product] = 1
+        # Mettre à jour les données du stock dans la collection 'stocks'
+        query = {"stocks." + product: {"$exists": True}}
+        stock = stocks_collection.find_one(query)
+
+        print(stock)
+        if stock:
+            if stock["stocks"][product]["quantity"] > 0:
+
+                # Récupérer l'utilisateur actuel depuis la collection 'users'
+                user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
+
+                print(user)
+
+                if user:
+                    # Mettre à jour le panier de l'utilisateur
+                    if user["users_list"]["user"][session['id']]["panier"]["Vide"] == "True":
+                        user["users_list"]["user"][session['id']]["panier"]["Vide"] = "False"
+                        user["users_list"]["user"][session['id']]["panier"]["content"][product] = 1
+                    else:
+                        if product in user["users_list"]["user"][session['id']]["panier"]["content"]:
+                            user["users_list"]["user"][session['id']]["panier"]["content"][product] += 1
+                        else:
+                            user["users_list"]["user"][session['id']]["panier"]["content"][product] = 1
+
+                    # Mettre à jour les données de l'utilisateur dans la collection 'users'
+                    users_collection.update_one(
+                        {"users_list.user." + session['id']: {"$exists": True}},
+                        {"$set": {"users_list.user." + session['id']: user["users_list"]["user"][session['id']]}}
+                    )
+
+                    stocks_collection.update_one(
+                        {"stocks.{}".format(product): {"$exists": True}},
+                        {"$inc": {"stocks.{}.quantity".format(product): -1}}
+                    )
+
+
             else:
-                if product in user["users_list"]["user"][session['id']]["panier"]["content"]:
-                    user["users_list"]["user"][session['id']]["panier"]["content"][product] += 1
-                else:
-                    user["users_list"]["user"][session['id']]["panier"]["content"][product] = 1
+                print("Le produit est en rupture de stock.")
+        else:
+            print("Le produit n'existe pas dans le stock.")
 
-            # Mettre à jour les données de l'utilisateur dans la collection 'users'
-            users_collection.update_one(
-                {"users_list.user": {session['id']: {"$exists": True}}},
-                {"$set": {"users_list.user." + session['id']: user["users_list"]["user"][session['id']]}}
-            )
 
-    return render_template("index.html")
+    return redirect(url_for("index"))
+
 
 
 # Page de paiement
