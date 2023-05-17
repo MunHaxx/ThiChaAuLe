@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react';
 import "./Description.css";
-import imgDescription from "../../images/imgDescription.jpeg"
+import imgDescription from "../../images/imgDescription.jpeg";
+import { Link } from 'react-router-dom';
 
 function Description() {
   return (
@@ -14,7 +15,7 @@ function Description() {
             <li>La France a porté de main</li>
             <li>Délicieux repas garantis !</li>
           </ul>
-          <button id='parcourir' type='search' value='parcourir'>PARCOURIR LES BOXS !</button>
+          <Link to = "/boxs"><button id='parcourir' type='search' value='parcourir'>PARCOURIR LES BOXS !</button></Link>
         </div>
     </div>
   )
