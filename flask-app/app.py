@@ -22,6 +22,17 @@ stripe.api_key = "secret_key"
 def index():
     return render_template('index.html')
 
+# Route permettant l'accès au json depuis le front
+# ==================
+#  NE PAS SUPPRIMER
+# ==================
+@app.route('/api/data')
+def get_data():
+    with open("stock.json", "r") as f:
+            # on récupére les users sous forme de dico
+            data = json.load(f)
+    return jsonify(data)
+
 
 # --------------------------------------- Gestion des users ---------------------------------------
 
