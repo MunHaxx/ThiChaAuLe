@@ -5,7 +5,7 @@
     text-align: center;
 }
 
-.title {
+.Bienvenue .title {
     list-style: none;
     padding: 40px;
     font-family: 'Hammersmith One', sans-serif;
@@ -14,23 +14,23 @@
     letter-spacing: 2px;
 }
 
-.the {
+.Bienvenue .the {
     color: #4A69BD;
     margin-right: 30px;
 }
 
-.flavor {
+.Bienvenue .flavor {
     color: #E55039;
     margin-left: 30px;
 }
 
-.subtitle {
+.Bienvenue .subtitle {
     font-family: 'Roboto Slab', Serif;
     font-size: 30px;
     font-weight: 600;
 }
 
-.image {
+.Bienvenue .image {
     display: flex;
     justify-content: center;
     margin-top: -50px;

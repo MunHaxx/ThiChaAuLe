@@ -1,15 +1,15 @@
 .Tarif {height:auto; min-height:calc(100vh - 73px); background-color: #FFFFFF; color: black; padding:60px 120px 60px 120px; box-sizing: border-box;}
 
-.title {font-size: 50px; margin-left:10px; color: #E55039; letter-spacing: 2px; margin:0px 30px 30px 30px; font-weight:bold;}
+.Tarif .title {font-size: 50px; margin-left:10px; color: #E55039; letter-spacing: 2px; margin:0px 30px 30px 30px; font-weight:bold;}
 
-.container-boxs {width:100%; height:auto; display: flex; flex-wrap: wrap; gap:50px; justify-content: space-between; }
+.Tarif .container-boxs {width:100%; height:auto; display: flex; flex-wrap: wrap; gap:50px; justify-content: space-between; }
 
-    .box {}
-        .title-box {color: #E55039; font-size:18px; margin-bottom: 20px; justify-content: center; display: flex; font-weight:bold;}
-        .background-box {position:relative; width:380px; height:580px; padding:40px 20px; border-radius: 20px; box-sizing: border-box; overflow: hidden; justify-content:space-between; display:flex; flex-direction: column; align-items: center;} 
-            .background-img {position:absolute; top:0px; z-index:9; height:580px; width:auto}
+    .Tarif .box {}
+        .Tarif .title-box {color: #E55039; font-size:18px; margin-bottom: 20px; justify-content: center; display: flex; font-weight:bold;}
+        .Tarif .background-box {position:relative; width:380px; height:580px; padding:40px 20px; border-radius: 20px; box-sizing: border-box; overflow: hidden; justify-content:space-between; display:flex; flex-direction: column; align-items: center;} 
+            .Tarif .background-img {position:absolute; top:0px; z-index:9; height:580px; width:auto}
             /* .background-img {position:absolute;} */
 
-            .container-price {position: relative; z-index:10; justify-content: center; display:flex; align-items: center; background-color: white; width:245px; height:50px; border-radius: 5px;}
-                .price {font-size: 25px}
-            .button-add {position: relative; z-index:10; justify-content: center; display:flex; align-items: center; background-color: #E55039; color:white; font-size: 15px; font-weight:bold; letter-spacing:1px; width:245px; height:50px; border-radius: 25px; cursor:pointer}
+            .Tarif .container-price {position: relative; z-index:10; justify-content: center; display:flex; align-items: center; background-color: white; width:245px; height:50px; border-radius: 5px;}
+                .Tarif .price {font-size: 25px}
+            .Tarif .button-add {position: relative; z-index:10; justify-content: center; display:flex; align-items: center; background-color: #E55039; color:white; font-size: 15px; font-weight:bold; letter-spacing:1px; width:245px; height:50px; border-radius: 25px; cursor:pointer}
