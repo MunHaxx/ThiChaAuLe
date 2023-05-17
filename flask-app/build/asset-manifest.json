@@ -1,15 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.f4038a51.css",
-    "main.js": "/static/js/main.c72c198e.js",
+    "main.css": "/static/css/main.afd56af3.css",
+    "main.js": "/static/js/main.67418119.js",
     "static/js/787.d3befce1.chunk.js": "/static/js/787.d3befce1.chunk.js",
+    "static/media/boxDécouverte.jpg": "/static/media/boxDécouverte.554ca602eea260ca890b.jpg",
+    "static/media/boxBoulangerie.jpg": "/static/media/boxBoulangerie.f3f0540b6ed5f5b9cd04.jpg",
+    "static/media/boxVinFromage.jpg": "/static/media/boxVinFromage.fa681e1bbc7234497974.jpg",
+    "static/media/imgDescription.jpeg": "/static/media/imgDescription.87edff25bfd5f9d13060.jpeg",
     "index.html": "/index.html",
-    "main.f4038a51.css.map": "/static/css/main.f4038a51.css.map",
-    "main.c72c198e.js.map": "/static/js/main.c72c198e.js.map",
+    "main.afd56af3.css.map": "/static/css/main.afd56af3.css.map",
+    "main.67418119.js.map": "/static/js/main.67418119.js.map",
     "787.d3befce1.chunk.js.map": "/static/js/787.d3befce1.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f4038a51.css",
-    "static/js/main.c72c198e.js"
+    "static/css/main.afd56af3.css",
+    "static/js/main.67418119.js"
   ]
 }

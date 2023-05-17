@@ -3,6 +3,7 @@
     top: 0px;
     border-bottom:  none;
     background-color: #0A3D62;
+    z-index: 20;
 }
 
 .Header .container { 
