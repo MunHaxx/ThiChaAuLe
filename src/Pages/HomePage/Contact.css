@@ -1,1 +1,52 @@
-.Contact {height:calc(100vh - 73px); background-color: #FFFFFF; color: black}
+.Contact {
+    height:auto;
+    min-height: calc(100vh - 73px); 
+    background-color: #FFFFFF; 
+    color: black;
+}
+
+.Contact .container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.contact-img{
+    height: calc(100vh - 73px);
+    width: auto;
+    min-height: 300px;
+}
+
+.information-container{
+    width: 800px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 150px 50px 90px 0px;
+}
+
+.contact-info-title{
+    width: 330px;
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 40px;
+    color: #E55039;
+}
+
+.contact-info{
+    margin-top: 100px;
+}
+
+.info-title{
+    font-family: 'Hammersmith One', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+.info{
+    font-family: 'Hanken Grotesk', sans-serif;
+    letter-spacing: 2px;
+    margin-bottom: 50px;
+}

@@ -1,1 +1,52 @@
-.Temoignages {height:calc(100vh - 73px); background-color: #0A3D62; color: white}
+.Temoignages {
+    height:auto;
+    min-height: calc(100vh - 73px);
+    background-color: #0A3D62; 
+    color: white;
+}
+
+.tem-title{
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    text-align: center;
+    border-top: 100px solid #0A3D62;
+}
+
+.Temoignages .container{
+    display: flex;
+    justify-content: space-between;
+    padding: 50px 75px 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.quote {
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    width: 45%;
+    height: 400px;
+    min-width: 300px;
+}
+
+.quote .icon-quote{
+    display: flex;
+    justify-content: left;
+    width: 30px;
+    height: auto;
+}
+
+.quote .quote-title{
+    font-family: 'Hammersmith One', sans-serif;
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+.quote .quote-container{
+    font-family: 'Hanken Grotesk', sans-serif;
+
+}

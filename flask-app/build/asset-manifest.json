@@ -1,5 +1,6 @@
 {
   "files": {
+<<<<<<< HEAD
     "main.css": "/static/css/main.afd56af3.css",
     "main.js": "/static/js/main.67418119.js",
     "static/js/787.d3befce1.chunk.js": "/static/js/787.d3befce1.chunk.js",
@@ -15,5 +16,23 @@
   "entrypoints": [
     "static/css/main.afd56af3.css",
     "static/js/main.67418119.js"
+=======
+    "main.css": "/static/css/main.7139304d.css",
+    "main.js": "/static/js/main.6c2bfc44.js",
+    "static/js/787.d3befce1.chunk.js": "/static/js/787.d3befce1.chunk.js",
+    "static/media/imgLogin.jpg": "/static/media/imgLogin.1c475b1d0140c1a52c99.jpg",
+    "static/media/imgBienvenue.png": "/static/media/imgBienvenue.809ede8cf75ea35c7b18.png",
+    "static/media/imgDescription.jpeg": "/static/media/imgDescription.87edff25bfd5f9d13060.jpeg",
+    "static/media/imgCart.png": "/static/media/imgCart.c1d333f16720c6ecbbe5.png",
+    "static/media/imgQuote.png": "/static/media/imgQuote.fd786555cf8aa0e06f6c.png",
+    "index.html": "/index.html",
+    "main.7139304d.css.map": "/static/css/main.7139304d.css.map",
+    "main.6c2bfc44.js.map": "/static/js/main.6c2bfc44.js.map",
+    "787.d3befce1.chunk.js.map": "/static/js/787.d3befce1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7139304d.css",
+    "static/js/main.6c2bfc44.js"
+>>>>>>> develop
   ]
 }

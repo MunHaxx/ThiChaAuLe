@@ -1,1 +1,43 @@
-.Bienvenue {height:calc(100vh - 73px); background-color: #0A3D62; color: white}
+.Bienvenue {
+    height:calc(100vh - 73px); 
+    background-color: #0A3D62; 
+    color: white;
+    text-align: center;
+}
+
+.title {
+    list-style: none;
+    padding: 40px;
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 100px;
+    border-top: 20px solid #0A3D62;
+    letter-spacing: 2px;
+}
+
+.the {
+    color: #4A69BD;
+    margin-right: 30px;
+}
+
+.flavor {
+    color: #E55039;
+    margin-left: 30px;
+}
+
+.subtitle {
+    font-family: 'Roboto Slab', Serif;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.image {
+    display: flex;
+    justify-content: center;
+    margin-top: -50px;
+}
+
+.Bienvenue img {
+    width: 750px;
+    height: auto;
+}
+
