@@ -1,8 +1,8 @@
 .Bienvenue {
-    height:calc(100vh - 73px); 
     background-color: #0A3D62; 
     color: white;
     text-align: center;
+    padding: 20px 0 20px 0;
 }
 
 .Bienvenue .title {
@@ -10,7 +10,6 @@
     padding: 40px;
     font-family: 'Hammersmith One', sans-serif;
     font-size: 100px;
-    border-top: 20px solid #0A3D62;
     letter-spacing: 2px;
 }
 
@@ -18,10 +17,13 @@
     color: #4A69BD;
     margin-right: 30px;
 }
+.Bienvenue .french {
+    color: white;
+    margin-right: 30px;
+}
 
 .Bienvenue .flavor {
     color: #E55039;
-    margin-left: 30px;
 }
 
 .Bienvenue .subtitle {
@@ -33,11 +35,10 @@
 .Bienvenue .image {
     display: flex;
     justify-content: center;
-    margin-top: -50px;
 }
 
 .Bienvenue img {
-    width: 750px;
+    width: 900px;
     height: auto;
 }
 

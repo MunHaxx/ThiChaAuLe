@@ -1,4 +1,4 @@
-.Tarif {height:auto; min-height:calc(100vh - 73px); background-color: #FFFFFF; color: black; padding:60px 120px 60px 120px; box-sizing: border-box;}
+.Tarif {background-color: #FFFFFF; color: black; padding:60px 120px 60px 120px;}
 
 .Tarif .title {font-size: 50px; margin-left:10px; color: #E55039; letter-spacing: 2px; margin:0px 30px 30px 30px; font-weight:bold;}
 

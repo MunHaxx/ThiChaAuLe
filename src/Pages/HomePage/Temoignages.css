@@ -1,11 +1,9 @@
 .Temoignages {
-    height:auto;
-    min-height: calc(100vh - 73px);
     background-color: #0A3D62; 
     color: white;
 }
 
-.tem-title{
+.Temoignages .title{
     font-family: 'Hammersmith One', sans-serif;
     font-size: 50px;
     font-weight: 700;
@@ -13,7 +11,7 @@
     border-top: 100px solid #0A3D62;
 }
 
-.Temoignages .container{
+.Temoignages .quotes-container {
     display: flex;
     justify-content: space-between;
     padding: 50px 75px 30px;
@@ -24,29 +22,43 @@
     gap: 20px;
 }
 
-.quote {
+.Temoignages .quote {
     display:flex;
     flex-direction:column;
     justify-content: center;
     width: 45%;
     height: 400px;
-    min-width: 300px;
+    /* min-width: 300px; */
 }
 
-.quote .icon-quote{
+.Temoignages .quote .icon-quote{
     display: flex;
     justify-content: left;
-    width: 30px;
+    width: 46px;
     height: auto;
+    margin-bottom: 30px;
 }
 
-.quote .quote-title{
+.Temoignages .quote-title{
     font-family: 'Hammersmith One', sans-serif;
-    margin-top: 30px;
-    font-size: 20px;
+    margin-bottom: 15px;
+    font-size: 28px;
 }
 
-.quote .quote-container{
+.Temoignages .info-container{
     font-family: 'Hanken Grotesk', sans-serif;
 
 }
+
+.Temoignages .quote-text {
+    width:400px;
+    margin-bottom:20px;
+    font-size: 20px
+}
+
+.Temoignages .quote-author {
+    font-size: 18px
+}
+
+
+

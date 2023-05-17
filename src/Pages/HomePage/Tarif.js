@@ -31,7 +31,7 @@ function Tarif() {
   }, []);
 
   return (
-    <div className="Tarif">
+    <div className="Page Tarif">
         <div className="title">TARIF</div>
 
         <div className="container-boxs">

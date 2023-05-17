@@ -7,21 +7,19 @@ function Header() {
 
   return (
     <div className="Header">
-        <div className = "container">
-            <div className = "home">
-              <Link to="/">HOME</Link>
-              <Link to="/login">LOGIN</Link>
-              <Link to="/boxs">BOXS</Link>
-            </div>
-            
-            <div className = "panier">
-              <Link to="/panier">
-                <img alt="" src = {imgCart}/>
-                PANIER
-              </Link>
-            </div>
-            
+        <div className = "home">
+          <Link to="/">HOME</Link>
+          <Link to="/login">LOGIN</Link>
+          <Link to="/boxs">BOXS</Link>
         </div>
+        
+        <div className="panier">
+          <Link to="/panier">
+            <img alt="" src = {imgCart}/>
+            <div className="texte-panier">PANIER</div>
+          </Link>
+        </div>
+            
     </div>
   );
 }

@@ -1,27 +1,21 @@
 .Header {
     position: sticky;
     top: 0px;
-    border-bottom:  none;
     background-color: #0A3D62;
     z-index: 20;
-}
-
-.Header .container { 
+    height: 80px;
     display: flex;
-    list-style: none; 
-    padding: 20px; 
-    margin: 0px;
+    padding: 20px 40px 0px 40px;
     justify-content: space-between;
+    box-sizing: border-box;
 }
 
-.Header .home  { 
-    display: inline; 
-    margin-left: 20px;
+.Header .home a {
+    margin-right: 60px;
 }
 
-.Header .panier  { 
+.Header .panier a { 
     display: flex;
-    margin-right: 50px;
 }
 
 .Header div a {
@@ -33,12 +27,8 @@
     letter-spacing: 2px;
 }
 
-.Header .home a {
-    margin-right: 60px;
-}
-
-.panier img{
-    margin-right: 10px;
+.panier img {
+    margin-right: 20px;
     color: white;
     width: 40px;
     height: auto;
