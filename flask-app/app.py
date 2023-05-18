@@ -24,6 +24,12 @@ stripe.api_key = "secret_key"
 def index():
     return render_template('index.html')
 
+@app.route('/api/data')
+def get_data():
+    stocks = stocks_collection.find()
+    # on récupére les users sous forme de dico
+    return jsonify(stocks)
+
 
 # --------------------------------------- Gestion des users ---------------------------------------
 
@@ -389,18 +395,13 @@ def create_cmd():  # (user)
             }
         }
         cmd_data['commandes'].update(new_cmd)
-
+        """
         # On vide le panier de l'utilisateur
         panier['Vide'] = 'True'
         panier['content'] = {}
         users_data["users_list"]["user"].update(session['id'])
+        """
 
-        # On
-        elif type == "admin":
-            users_data["users_list"]["admin"].update(new_user)
-        else:
-            print("Erreur, le type d'utilisateur n'est pas reconnu")
-        users_collection.replace_one({}, users_data)  # MAJ la BDD avec les nouvelles données
 
         #return jsonify(user_data["users_list"]["user"][user]["panier"]["content"])
 
