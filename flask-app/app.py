@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session
 import stripe
 from pymongo import MongoClient
+from datetime import date
 
 # Se connecter à la base de données MongoDB
 client = MongoClient('mongodb://localhost:27017/')
@@ -9,6 +10,7 @@ db = client.commerce_db
 # Définir les collections
 users_collection = db['users']
 stocks_collection = db['stocks']
+cmd_collection = db['commandes']
 
 app = Flask(__name__, static_folder='./build/static', template_folder='./build')
 app.secret_key = 'my super secret key'.encode('utf8')
@@ -63,7 +65,6 @@ def delete_user(usertodel):
             return render_template('index.html',message="On ne peut pas supprimer le superviseur")
 
         else:
-
             users_data = users_collection.find_one({})
             # Vérifie si l'utilisateur à supprimer est un user ou un admin
             if usertodel in users_data['users_list']['admin']:
@@ -299,6 +300,44 @@ def AddCart(product):
 
 
 
+@app.route('/DelCart/<product>')
+def DelCart(product):
+    if session['type'] == "user":
+        # Récupérer l'utilisateur actuel depuis la collection 'users'
+        user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
+
+        if user:
+            # Vérifier si le produit est présent dans le panier de l'utilisateur
+            if product in user["users_list"]["user"][session['id']]["panier"]["content"]:
+                # Réduire la quantité du produit dans le panier de l'utilisateur
+                user["users_list"]["user"][session['id']]["panier"]["content"][product] -= 1
+
+                # Si la quantité atteint 0, supprimer le produit du panier
+                if user["users_list"]["user"][session['id']]["panier"]["content"][product] == 0:
+                    del user["users_list"]["user"][session['id']]["panier"]["content"][product]
+
+                # Mettre à jour les données de l'utilisateur dans la collection 'users'
+                users_collection.update_one(
+                    {"users_list.user." + session['id']: {"$exists": True}},
+                    {"$set": {"users_list.user." + session['id']: user["users_list"]["user"][session['id']]}}
+                )
+
+                # Mettre à jour les données de stock dans la collection 'stocks'
+                stocks_collection.update_one(
+                    {"stocks.{}".format(product): {"$exists": True}},
+                    {"$inc": {"stocks.{}.quantity".format(product): 1}}
+                )
+
+            else:
+                print("Le produit n'est pas présent dans le panier de l'utilisateur.")
+        else:
+            print("Utilisateur non trouvé.")
+
+    return redirect(url_for("index"))
+
+
+
+
 # Page de paiement
 @app.route("/payment", methods=["POST"])
 def payment():
@@ -324,8 +363,49 @@ def payment_succes():
 
 # --------------------------------------- Gestion des commandes ---------------------------------------
 # Si suppr user -> suppr ses commandes avec
-# Cmd est crée qd payment succeed
+# Cmd est crée qd payment succeed -> FCT cartToCmd
 # Status : Cmd en cours de préparation, terminé -> FCT recupCmdPrepa, recupCmdPrepa
+
+@app.route("/cmd")  # ROUTE A SUPPR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+def create_cmd():  # (user)
+    # Récupérer les données du panier de l'utilisateur
+    users_data = users_collection.find_one({})
+    panier = users_data['users_list'].get('user', {}).get(session['id']).get('panier')
+    # Récupérer l'indice de la nouvelle commande
+    cmd_data = cmd_collection.find_one({})
+    num = max(cmd_data.keys())+1
+
+    if panier['Vide']:
+        print("Erreur, on ne peut pas créer de commande à partir d'un panier vide")
+    else:
+        # On crée une nouvelle commande
+        new_cmd = {
+            num: {
+                "client": session['id'],
+                "date": date.today(),
+                "status": "En cours",
+                "prix": 999999999999,
+                "contenu": panier['content']
+            }
+        }
+        cmd_data['commandes'].update(new_cmd)
+
+        # On vide le panier de l'utilisateur
+        panier['Vide'] = 'True'
+        panier['content'] = {}
+        users_data["users_list"]["user"].update(session['id'])
+
+        # On
+        elif type == "admin":
+            users_data["users_list"]["admin"].update(new_user)
+        else:
+            print("Erreur, le type d'utilisateur n'est pas reconnu")
+        users_collection.replace_one({}, users_data)  # MAJ la BDD avec les nouvelles données
+
+        #return jsonify(user_data["users_list"]["user"][user]["panier"]["content"])
+
+    return render_template('index.html')
+
 
 # --------------------------------------- Programme principal ---------------------------------------
 
