@@ -371,6 +371,7 @@ def payment_succes():
 # Si suppr user -> suppr ses commandes avec
 # Status : Cmd en cours de préparation, terminé -> FCT recupCmdPrepa, recupCmdPrepa
 
+# Après le paiement, on crée une commande
 @app.route("/cmd")  # ROUTE A SUPPR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def create_cmd():  # (user)
     # Récupérer les données du panier de l'utilisateur
@@ -404,6 +405,21 @@ def create_cmd():  # (user)
 
     return render_template('index.html')
 
+
+# Supprimer une commande
+@app.route("/suppr_cmd/<num>")
+def suppr_cmd(num):
+    cmd_data = cmd_collection.find_one({})
+
+    if num in cmd_data["commandes"]:
+        # Supprimer la commande
+        del cmd_data["commandes"][num]
+        cmd_collection.replace_one({}, cmd_data)
+        print("La commande n°", num, " a bien été supprimée")
+    else:
+        print("La commande n°", num, " n'existe pas")
+
+    return render_template('index.html')
 
 # --------------------------------------- Programme principal ---------------------------------------
 
