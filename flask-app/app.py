@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session
+import json
 import stripe
 from pymongo import MongoClient
 
@@ -21,6 +22,17 @@ stripe.api_key = "secret_key"
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# Route permettant l'accès au json depuis le front
+# ==================
+#  NE PAS SUPPRIMER
+# ==================
+@app.route('/api/data')
+def get_data():
+    with open("stock.json", "r") as f:
+            # on récupére les users sous forme de dico
+            data = json.load(f)
+    return jsonify(data)
 
 
 # --------------------------------------- Gestion des users ---------------------------------------
