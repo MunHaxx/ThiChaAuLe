@@ -24,6 +24,7 @@ stripe.api_key = "secret_key"
 def index():
     return render_template('index.html')
 
+
 @app.route('/api/data')
 def get_data():
     stocks = stocks_collection.find()
@@ -68,31 +69,32 @@ def delete_user(usertodel):
 
         # Superviseur est un utilisateur intouchable
         if usertodel == "superviseur":
-            return render_template('index.html',message="On ne peut pas supprimer le superviseur")
+            return render_template('index.html', message="On ne peut pas supprimer le superviseur")
 
         else:
             users_data = users_collection.find_one({})
             # Vérifie si l'utilisateur à supprimer est un user ou un admin
             if usertodel in users_data['users_list']['admin']:
                 del users_data['users_list']['admin'][usertodel]
-                users_collection.replace_one({}, users_data) # MAJ de la collection
-                return render_template('index.html',message="On a supprimé l'utilisateur"+ usertodel)
+                users_collection.replace_one({}, users_data)  # MAJ de la collection
+                return render_template('index.html', message="On a supprimé l'utilisateur" + usertodel)
 
             elif usertodel in users_data['users_list']['user']:
                 del users_data['users_list']['user'][usertodel]
                 users_collection.replace_one({}, users_data)  # MAJ de la collection
-                return render_template('index.html',message="On a supprimé l'utilisateur"+ usertodel)
+                return render_template('index.html', message="On a supprimé l'utilisateur" + usertodel)
 
             elif usertodel == session['id']:
                 print("Vous suprimez votre propre compte")
                 return redirect(url_for('logout'))
 
             else:
-                return render_template('index.html',message="L'utilisateur n'existe pas")
+                return render_template('index.html', message="L'utilisateur n'existe pas")
 
     else:
         # ERREUR !!!!
-        return render_template('index.html',message="Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
+        return render_template('index.html',
+                               message="Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
 
 
 # Page d'inscription pour les utilisateurs
@@ -149,7 +151,7 @@ def login():
 def logout():
     # si on se déco on détruit la session et retourne à l'acceuil
     session.clear()
-    #return redirect(url_for('/'))
+    # return redirect(url_for('/'))
     return render_template('index.html')
 
 
@@ -203,7 +205,7 @@ def admin_to_user(user):
         # Modif de l'user
         elif user in users_data['users_list']['admin']:
             usertemp = users_data['users_list']['admin'].get(user, {})
-            #print(usertemp.get('id'))
+            # print(usertemp.get('id'))
             delete_user(user)
             add_user(usertemp.get('id'), usertemp.get('password'), "user")
             print(user, "est maintenant utilisateur")
@@ -225,6 +227,7 @@ def admin_to_user(user):
 @app.route('/admin')
 def admin():
     return render_template('index.html')
+
 
 # tableau de bord user avec panier etc.
 @app.route('/userdashboard/<user>')
@@ -301,9 +304,7 @@ def AddCart(product):
         else:
             print("Le produit n'existe pas dans le stock.")
 
-
     return redirect(url_for("index"))
-
 
 
 @app.route('/DelCart/<product>')
@@ -342,8 +343,6 @@ def DelCart(product):
     return redirect(url_for("index"))
 
 
-
-
 # Page de paiement
 @app.route("/payment", methods=["POST"])
 def payment():
@@ -379,7 +378,7 @@ def create_cmd():  # (user)
     panier = users_data['users_list'].get('user', {}).get(session['id']).get('panier')
     # Récupérer l'indice de la nouvelle commande
     cmd_data = cmd_collection.find_one({})
-    num = str(max(int(key) for key in cmd_data['commandes'].keys())+1)
+    num = str(max(int(key) for key in cmd_data['commandes'].keys()) + 1)
 
     if cmd_data and users_data:
         if panier['Vide'] == 'True':
@@ -411,15 +410,44 @@ def create_cmd():  # (user)
 def suppr_cmd(num):
     cmd_data = cmd_collection.find_one({})
 
-    if num in cmd_data["commandes"]:
-        # Supprimer la commande
-        del cmd_data["commandes"][num]
-        cmd_collection.replace_one({}, cmd_data)
-        print("La commande n°", num, " a bien été supprimée")
-    else:
-        print("La commande n°", num, " n'existe pas")
+    if cmd_data:
+        if num in cmd_data["commandes"]:
+            # Supprimer la commande
+            del cmd_data["commandes"][num]
+            cmd_collection.replace_one({}, cmd_data)
+            print("La commande n°", num, " a bien été supprimée")
+        else:
+            print("La commande n°", num, " n'existe pas")
 
     return render_template('index.html')
+
+
+# Récupère la liste des commandes d'un user
+@app.route("/user_cmd/<user>")
+def user_cmd(user):
+    # Récupère les données de la base
+    users_data = users_collection.find_one({})
+    cmd_data = cmd_collection.find_one({})
+
+    # Vérifie si l'utilisateur existe
+    if users_data and user in users_data['users_list'].get('user', {}):
+        if cmd_data:
+            listCmd = {}
+            # Parcourt toutes les commandes
+            for num, cmd in cmd_data["commandes"].items():
+                if cmd['client'] == session['id']:
+                    # Construit un json avec les commandes de l'utilisateur
+                    if cmd['client'] not in listCmd:
+                        listCmd[cmd['client']] = []
+                    listCmd[cmd['client']].append(cmd)
+            if listCmd == {}: print("L'utilisateur n'a pas encore réalisé de commandes")
+            else: return jsonify(listCmd)  # Retourne le fichier json
+    else:
+        print("L'utilisateur n'existe ppas")
+
+    # Rediriger vers le site web adapté à la personne connectée
+    return redirect(url_for('userdashboard', user=id))
+
 
 # --------------------------------------- Programme principal ---------------------------------------
 
