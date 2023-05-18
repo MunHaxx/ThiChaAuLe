@@ -84,3 +84,15 @@ Une fois fais, toujours sur la branche maBranche, exécuter la commande :
 Vous allez avoir une erreur lors de votre premier push sur une nouvelle branche. Copier la commande git push ... qu'on vous propose, et coller là pour l'exécuter, ça va push correctement votre code.
 
 Ensuite, aller dans git hub, et cliquer sur le bouton "créer une pull request" puis créer votre pull request. Enfin, demander à votre mate de review la PR et les modifications avant de merge les changements afin d'avoir un deuxième avis.  
+
+
+<br><br>
+
+## Comment installer MongoDB ?
+
+Aller sur le site:
+https://www.mongodb.com/try/download/community
+
+Créer une nouveau port de connexion : mongodb://localhost:27017/ (default port sous windows)
+Run le fichier database.py package pour intialiser la database sur votre machine.
+Run le fichier app.py and tout bon :)
