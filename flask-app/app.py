@@ -369,7 +369,6 @@ def payment_succes():
 
 # --------------------------------------- Gestion des commandes ---------------------------------------
 # Si suppr user -> suppr ses commandes avec
-# Cmd est crée qd payment succeed -> FCT cartToCmd
 # Status : Cmd en cours de préparation, terminé -> FCT recupCmdPrepa, recupCmdPrepa
 
 @app.route("/cmd")  # ROUTE A SUPPR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -379,31 +378,29 @@ def create_cmd():  # (user)
     panier = users_data['users_list'].get('user', {}).get(session['id']).get('panier')
     # Récupérer l'indice de la nouvelle commande
     cmd_data = cmd_collection.find_one({})
-    num = max(cmd_data.keys())+1
+    num = str(max(int(key) for key in cmd_data['commandes'].keys())+1)
 
-    if panier['Vide']:
-        print("Erreur, on ne peut pas créer de commande à partir d'un panier vide")
-    else:
-        # On crée une nouvelle commande
-        new_cmd = {
-            num: {
-                "client": session['id'],
-                "date": date.today(),
-                "status": "En cours",
-                "prix": 999999999999,
-                "contenu": panier['content']
+    if cmd_data and users_data:
+        if panier['Vide'] == 'True':
+            print("Erreur, on ne peut pas créer de commande à partir d'un panier vide")
+        else:
+            # On crée une nouvelle commande
+            new_cmd = {
+                num: {
+                    "client": session['id'],
+                    "date": date.today().strftime("%d/%m/%Y"),
+                    "status": "En cours",
+                    "prix": 99999999,
+                    "contenu": panier['content']
+                }
             }
-        }
-        cmd_data['commandes'].update(new_cmd)
-        """
-        # On vide le panier de l'utilisateur
-        panier['Vide'] = 'True'
-        panier['content'] = {}
-        users_data["users_list"]["user"].update(session['id'])
-        """
+            cmd_data['commandes'].update(new_cmd)
+            cmd_collection.replace_one({}, cmd_data)  # MAJ la BDD avec les nouvelles données
 
-
-        #return jsonify(user_data["users_list"]["user"][user]["panier"]["content"])
+            # On vide le panier de l'utilisateur
+            panier['Vide'] = 'True'
+            panier['content'] = {}
+            users_collection.replace_one({}, users_data)  # MAJ la BDD avec les nouvelles données
 
     return render_template('index.html')
 
