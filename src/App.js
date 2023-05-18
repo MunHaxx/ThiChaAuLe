@@ -4,7 +4,9 @@ import Header from './component/Header';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from "./Pages/Home"
 import Login from "./Pages/Login"
+import Register from "./Pages/Register"
 import Tarif from './Pages/HomePage/Tarif';
+import Panier from './Pages/Panier';
 
 function App() {
 
@@ -17,6 +19,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/boxs" element={<Tarif />} />
+          <Route path="/panier" element={<Panier />} />
+          <Route path="/register" element={<Register />} />
+
         </Routes>
 
       </BrowserRouter>
