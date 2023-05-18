@@ -322,6 +322,11 @@ def payment_succes():
     render_template("index.html")
 
 
+# --------------------------------------- Gestion des commandes ---------------------------------------
+# Si suppr user -> suppr ses commandes avec
+# Cmd est crée qd payment succeed
+# Status : Cmd en cours de préparation, terminé -> FCT recupCmdPrepa, recupCmdPrepa
+
 # --------------------------------------- Programme principal ---------------------------------------
 
 # lancement de l'appli flask
