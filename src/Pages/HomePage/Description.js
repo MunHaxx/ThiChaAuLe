@@ -1,7 +1,6 @@
 import React from 'react';
 import "./Description.css";
 import imgDescription from "../../images/imgDescription.jpeg";
-import imgWave from "../../images/wave.png";
 
 import { Link } from 'react-router-dom';
 
