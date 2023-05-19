@@ -1,7 +1,6 @@
 import React from 'react';
 import "./Description.css";
 import imgDescription from "../../images/imgDescription.jpeg";
-import imgWave from "../../images/wave.png";
 
 import { Link } from 'react-router-dom';
 
@@ -10,7 +9,6 @@ function Description() {
     <div className="Page Description">
         <div className="container-image">
           <img alt="" src={imgDescription} />
-          {/* <img className='wave' alt="" src={imgWave} /> */}
         </div>
 
         <div className="right-part-container">

@@ -3,7 +3,7 @@ cp -r build flask-app/;
 cd flask-app;
 source venv/Scripts/activate
 
-flask run &
+python3 -m flask run &
 
 sleep 2
 open "http://127.0.0.1:5000"
