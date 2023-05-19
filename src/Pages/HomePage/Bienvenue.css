@@ -3,6 +3,7 @@
     color: white;
     text-align: center;
     padding: 20px 0 20px 0;
+   
 }
 
 .Bienvenue .title {
@@ -11,6 +12,8 @@
     font-family: 'Hammersmith One', sans-serif;
     font-size: 100px;
     letter-spacing: 2px;
+    display: flex;
+    justify-content: center;
 }
 
 .Bienvenue .the {
@@ -38,7 +41,38 @@
 }
 
 .Bienvenue img {
-    width: 900px;
+    width: 100%;
+    max-width: 900px;
     height: auto;
 }
 
+
+@media screen and (max-width:1024px) {
+    .Bienvenue .title {
+        font-size: 70px;
+    }
+
+    .Bienvenue .subtitle {
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .Bienvenue .title {
+        font-size: 50px;
+        flex-direction: column;
+    }
+
+    .Bienvenue .subtitle {
+        font-size: 20px;
+    }
+
+    .Bienvenue .the, .Bienvenue .french {
+        margin-right: 0px;
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+}

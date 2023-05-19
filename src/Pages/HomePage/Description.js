@@ -10,7 +10,6 @@ function Description() {
     <div className="Page Description">
         <div className="container-image">
           <img alt="" src={imgDescription} />
-          {/* <img className='wave' alt="" src={imgWave} /> */}
         </div>
 
         <div className="right-part-container">

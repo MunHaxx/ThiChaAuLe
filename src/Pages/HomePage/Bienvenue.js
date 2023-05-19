@@ -6,9 +6,9 @@ function Bienvenue() {
   return (
     <div className="Page Bienvenue">
         <div className='title'>
-          <span className="the">THE</span>  
-          <span className="french">FRENCH</span> 
-          <span className = "flavor">FLAVOR</span>
+          <div className="the">THE</div>  
+          <div className="french">FRENCH</div> 
+          <div className = "flavor">FLAVOR</div>
         </div>
         <div className='subtitle'>
           BOX DE NOURRITURE 

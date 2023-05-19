@@ -1,6 +1,7 @@
 .Temoignages {
     background-color: #0A3D62; 
     color: white;
+    padding-bottom: 50px;
 }
 
 .Temoignages .title{
@@ -13,22 +14,23 @@
 
 .Temoignages .quotes-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding: 50px 75px 30px;
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 20px;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 70px 20vw;
 }
 
 .Temoignages .quote {
     display:flex;
     flex-direction:column;
     justify-content: center;
-    width: 45%;
+    width: 400px;
     height: 400px;
-    /* min-width: 300px; */
+    min-width: 350px;
+    box-sizing: border-box;
 }
 
 .Temoignages .quote .icon-quote{
@@ -60,5 +62,42 @@
     font-size: 18px
 }
 
+@media screen and (max-width:1240px) {
+    .Temoignages .quotes-container {
+        gap: 70px 8vw;
+    }
+}
+@media screen and (max-width:1080px) {
+    .Temoignages .quotes-container {
+        gap: 70px 2vw;
+    }
+}
 
+@media screen and (max-width:1024px) {
+}
 
+@media screen and (max-width: 768px) {
+}
+
+@media screen and (max-width: 480px) {
+    .Temoignages .quotes-container {
+        padding-top:20px;
+    }
+
+    .Temoignages .quote .icon-quote{
+        width: 35px;
+    }
+    
+    .Temoignages .quote-title{
+        font-size: 25px;
+    }
+    
+    .Temoignages .quote-text {
+        width: 280px;
+        font-size: 18px;
+    }
+    
+    .Temoignages .quote-author {
+        font-size: 16px;
+    }
+}
