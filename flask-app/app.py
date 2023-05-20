@@ -368,7 +368,7 @@ def payment_succes():
 
 # --------------------------------------- Gestion des commandes ---------------------------------------
 # Si suppr user -> suppr ses commandes avec
-# Status : Cmd en cours de préparation, terminé -> FCT recupCmdPrepa, recupCmdPrepa
+# Status : Cmd en cours de préparation, terminé -> FCT recupCmdPrepa, recupCmdTerm
 
 # Après le paiement, on crée une commande
 @app.route("/cmd")  # ROUTE A SUPPR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -402,7 +402,8 @@ def create_cmd():  # (user)
             panier['content'] = {}
             users_collection.replace_one({}, users_data)  # MAJ la BDD avec les nouvelles données
 
-    return render_template('index.html')
+    # Rediriger vers le site web adapté à la personne connectée
+    return redirect(url_for('userdashboard', user=id))
 
 
 # Supprimer une commande
@@ -448,6 +449,30 @@ def user_cmd(user):
     # Rediriger vers le site web adapté à la personne connectée
     return redirect(url_for('userdashboard', user=id))
 
+
+# Récupère la liste des commandes en cours pour le dashboard ADMIN
+@app.route("/cmd_encours") # ROUTE A SUPPR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+def cmd_encours():
+    if session['type'] == "admin":
+        cmd_data = cmd_collection.find_one({})
+        if cmd_data:
+            listCmd = {}
+            # Parcourt toutes les commandes
+            for num, cmd in cmd_data["commandes"].items():
+                print(num)
+                print(cmd)
+                # Construit un json avec les commandes en cours
+                if cmd['status'] == 'En cours':
+                    listCmd[num] = cmd
+            if listCmd == {}:
+                print("Il n'y a aucune commande à préparer")
+            else:
+                return jsonify(listCmd)  # Retourne le fichier json
+
+    else:
+        print("Erreur, vous n'êtes pas admin, vous ne pouvez pas accéder aux status des commandes")
+
+    return render_template('index.html')
 
 # --------------------------------------- Programme principal ---------------------------------------
 
