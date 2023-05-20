@@ -371,11 +371,10 @@ def payment_succes():
 # Status : Cmd en cours de préparation, terminé -> FCT recupCmdPrepa, recupCmdTerm
 
 # Après le paiement, on crée une commande
-@app.route("/cmd")  # ROUTE A SUPPR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-def create_cmd():  # (user)
+def create_cmd(user):
     # Récupérer les données du panier de l'utilisateur
     users_data = users_collection.find_one({})
-    panier = users_data['users_list'].get('user', {}).get(session['id']).get('panier')
+    panier = users_data['users_list'].get('user', {}).get(user).get('panier')
     # Récupérer l'indice de la nouvelle commande
     cmd_data = cmd_collection.find_one({})
     num = str(max(int(key) for key in cmd_data['commandes'].keys()) + 1)
@@ -387,7 +386,7 @@ def create_cmd():  # (user)
             # On crée une nouvelle commande
             new_cmd = {
                 num: {
-                    "client": session['id'],
+                    "client": user,
                     "date": date.today().strftime("%d/%m/%Y"),
                     "status": "En cours",
                     "prix": 99999999,
@@ -450,17 +449,14 @@ def user_cmd(user):
     return redirect(url_for('userdashboard', user=id))
 
 
-# Récupère la liste des commandes en cours pour le dashboard ADMIN
-@app.route("/cmd_encours") # ROUTE A SUPPR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-def cmd_encours():
+# Récupère la liste des commandes à préparer pour le dashboard ADMIN
+def list_cmd_encours():
     if session['type'] == "admin":
         cmd_data = cmd_collection.find_one({})
         if cmd_data:
             listCmd = {}
             # Parcourt toutes les commandes
             for num, cmd in cmd_data["commandes"].items():
-                print(num)
-                print(cmd)
                 # Construit un json avec les commandes en cours
                 if cmd['status'] == 'En cours':
                     listCmd[num] = cmd
@@ -472,7 +468,60 @@ def cmd_encours():
     else:
         print("Erreur, vous n'êtes pas admin, vous ne pouvez pas accéder aux status des commandes")
 
-    return render_template('index.html')
+    return jsonify({})
+
+
+# Récupère la liste des commandes terminé pour le dashboard ADMIN
+def list_cmd_term():
+    if session['type'] == "admin":
+        cmd_data = cmd_collection.find_one({})
+        if cmd_data:
+            listCmd = {}
+            # Parcourt toutes les commandes
+            for num, cmd in cmd_data["commandes"].items():
+                # Construit un json avec les commandes en cours
+                if cmd['status'] == 'Terminé':
+                    listCmd[num] = cmd
+            if listCmd == {}:
+                print("Il n'y a aucune commande terminée")
+            else:
+                return jsonify(listCmd)  # Retourne le fichier json
+
+    else:
+        print("Erreur, vous n'êtes pas admin, vous ne pouvez pas accéder aux status des commandes")
+
+    return jsonify({})
+
+
+# Modifie le status d'une commande pour la mettre en Terminé
+def terminer_cmd(num):
+    if session['type'] == "admin":
+        cmd_data = cmd_collection.find_one({})
+        if cmd_data and num in cmd_data['commandes']:
+            cmd = cmd_data['commandes'][num]
+            cmd['status'] = 'Terminé'
+            cmd_data['commandes'].update(cmd)
+            cmd_collection.replace_one({}, cmd_data)  # MAJ la BDD avec les nouvelles données
+        else:
+            print("La commande n°", num, " n'existe pas")
+    else:
+        print("Erreur, vous n'êtes pas admin, vous ne pouvez pas modifier le status des commandes")
+
+
+# Modifie le status d'une commande pour la mettre en En cours
+def encours_cmd(num):
+    if session['type'] == "admin":
+        cmd_data = cmd_collection.find_one({})
+        if cmd_data and num in cmd_data['commandes']:
+            cmd = cmd_data['commandes'][num]
+            cmd['status'] = 'En cours'
+            cmd_data['commandes'].update(cmd)
+            cmd_collection.replace_one({}, cmd_data)  # MAJ la BDD avec les nouvelles données
+        else:
+            print("La commande n°", num, " n'existe pas")
+    else:
+        print("Erreur, vous n'êtes pas admin, vous ne pouvez pas modifier le status des commandes")
+
 
 # --------------------------------------- Programme principal ---------------------------------------
 
