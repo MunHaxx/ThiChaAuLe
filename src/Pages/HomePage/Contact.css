@@ -8,14 +8,20 @@
     justify-content: space-between;
 }
 
-.contact-img{
-    height: calc(100vh - 73px);
-    width: auto;
-    min-height: 300px;
+.Contact .contact-img-container {
+    width: 50vw;
+    display:flex;
+    height: calc(100vh - 80px);
 }
 
-.information-container{
-    width: 800px;
+.Contact .contact-img{
+    height:100%;
+    width:auto;
+}
+
+.Contact .information-container{
+    width: 100vw;
+    max-width: 800px;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -24,18 +30,18 @@
     padding: 150px 50px 90px 0px;
 }
 
-.contact-info-title{
+.Contact .contact-info-title{
     width: 330px;
     font-family: 'Hammersmith One', sans-serif;
     font-size: 40px;
     color: #E55039;
 }
 
-.contact-info{
+.Contact .contact-info{
     margin-top: 100px;
 }
 
-.info-title{
+.Contact .info-title{
     font-family: 'Hammersmith One', sans-serif;
     font-weight: 600;
     font-size: 18px;
@@ -43,8 +49,59 @@
     margin-bottom: 5px;
 }
 
-.info{
+.Contact .info{
     font-family: 'Hanken Grotesk', sans-serif;
     letter-spacing: 2px;
     margin-bottom: 50px;
+}
+
+@media screen and (max-width:1240px) {
+    .Contact {
+        display: flex;
+        justify-content: center;
+        padding-right: 50px;
+    }
+
+    .Contact .contact-img-container {
+        display: none;
+    }
+}
+
+@media screen and (max-width:1024px) {
+}
+
+@media screen and (max-width: 768px) {
+    
+    
+    .Description ul li {
+        font-size: 16px;
+    }
+
+    .Description .right-part-container {
+        padding-top: -200px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .Contact .contact-info-title {
+        font-size: 25px;
+        margin-bottom: 0px;
+    }
+
+    .Contact {
+        padding: 0;
+    }
+
+    .Contact .information-container {
+        padding-right: 0;
+    }
+
+    .Contact .container {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .Contact .contact-info-title {
+        text-align: center;
+    }
 }
