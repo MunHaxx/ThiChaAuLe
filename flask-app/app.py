@@ -73,20 +73,31 @@ def delete_user(usertodel):
 
         else:
             users_data = users_collection.find_one({})
+
             # Vérifie si l'utilisateur à supprimer est un user ou un admin
-            if usertodel in users_data['users_list']['admin']:
+            if users_data and usertodel in users_data['users_list']['admin']:
+                # Supprime l'admin
                 del users_data['users_list']['admin'][usertodel]
                 users_collection.replace_one({}, users_data)  # MAJ de la collection
+                # Si on supprime son propre compte, on se déconnecte
+                if usertodel == session['id']:
+                    print("Vous supprimez votre compte")
+                    return redirect(url_for('logout'))
                 return render_template('index.html', message="On a supprimé l'utilisateur" + usertodel)
 
-            elif usertodel in users_data['users_list']['user']:
+            elif users_data and usertodel in users_data['users_list']['user']:
+                # Supprime les commandes associées à l'utilisateur
+                Lcmd = list_cmd_user(usertodel).get_json()  # convertit fichier JSON en dictionnaire python
+                for num in Lcmd:
+                    suppr_cmd(num)
+                # Supprime l'utilisateur
                 del users_data['users_list']['user'][usertodel]
                 users_collection.replace_one({}, users_data)  # MAJ de la collection
+                # Si on supprime son propre compte, on se déconnecte
+                if usertodel == session['id']:
+                    print("Vous supprimez votre compte")
+                    return redirect(url_for('logout'))
                 return render_template('index.html', message="On a supprimé l'utilisateur" + usertodel)
-
-            elif usertodel == session['id']:
-                print("Vous suprimez votre propre compte")
-                return redirect(url_for('logout'))
 
             else:
                 return render_template('index.html', message="L'utilisateur n'existe pas")
@@ -368,7 +379,6 @@ def payment_succes():
 
 # --------------------------------------- Gestion des commandes ---------------------------------------
 # Si suppr user -> suppr ses commandes avec
-# Status : Cmd en cours de préparation, terminé -> FCT recupCmdPrepa, recupCmdTerm
 
 # Après le paiement, on crée une commande
 def create_cmd(user):
@@ -423,8 +433,7 @@ def suppr_cmd(num):
 
 
 # Récupère la liste des commandes d'un user
-@app.route("/user_cmd/<user>")
-def user_cmd(user):
+def list_cmd_user(user):
     # Récupère les données de la base
     users_data = users_collection.find_one({})
     cmd_data = cmd_collection.find_one({})
@@ -435,18 +444,18 @@ def user_cmd(user):
             listCmd = {}
             # Parcourt toutes les commandes
             for num, cmd in cmd_data["commandes"].items():
-                if cmd['client'] == session['id']:
+                if cmd['client'] == user:
                     # Construit un json avec les commandes de l'utilisateur
-                    if cmd['client'] not in listCmd:
-                        listCmd[cmd['client']] = []
-                    listCmd[cmd['client']].append(cmd)
-            if listCmd == {}: print("L'utilisateur n'a pas encore réalisé de commandes")
-            else: return jsonify(listCmd)  # Retourne le fichier json
+                    listCmd[num] = cmd
+            if listCmd == {}:
+                print("L'utilisateur n'a pas encore réalisé de commandes")
+            else:
+                print("Je retourne ça\n", listCmd)
+                return jsonify(listCmd)  # Retourne le fichier json
     else:
-        print("L'utilisateur n'existe ppas")
+        print("L'utilisateur n'existe pas")
 
-    # Rediriger vers le site web adapté à la personne connectée
-    return redirect(url_for('userdashboard', user=id))
+    return jsonify({})
 
 
 # Récupère la liste des commandes à préparer pour le dashboard ADMIN
