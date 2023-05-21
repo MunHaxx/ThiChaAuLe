@@ -1,7 +1,7 @@
 import React from 'react'
 import "./Tarif.css";
 import Image1 from "../../images/boxBoulangerie.jpg";
-import Image2 from "../../images/boxDécouverte.jpg";
+import Image2 from "../../images/boxDecouverte.jpg";
 import Image3 from "../../images/boxVinFromage.jpg";
 
 import axios from 'axios';
@@ -25,7 +25,7 @@ function Tarif() {
     const fetchData = async () => {
       const result = await axios.get('/api/data');
       setData(result.data.stocks);
-      setIsLoading(false);
+      //setIsLoading(false);
     };
     fetchData();
   }, []);

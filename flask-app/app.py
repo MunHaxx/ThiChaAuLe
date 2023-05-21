@@ -168,7 +168,6 @@ def user_to_admin(user):
         # Modif de l'user
         elif user in users_data['users_list']['user']:
             usertemp = users_data['users_list']['user'].get(user, {})
-            print(usertemp.get('id'))
             delete_user(user)
             add_user(usertemp.get('id'), usertemp.get('password'), "admin")
             print(user, "est maintenant administrateur")
@@ -271,22 +270,19 @@ def UpdateTotalCart(user,stock):
 
 @app.route('/AddCart/<product>')
 def AddCart(product):
-    print(session['id'])
-    print(session['type'])
     if session['type'] == "user":
 
         # Mettre à jour les données du stock dans la collection 'stocks'
         query = {"stocks." + product: {"$exists": True}}
         stock = stocks_collection.find_one(query)
 
-        print(stock)
         if stock:
             if stock["stocks"][product]["quantity"] > 0:
 
                 # Récupérer l'utilisateur actuel depuis la collection 'users'
                 user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
 
-                print(user)
+                #print(user)
 
                 if user:
                     # Mettre à jour le panier de l'utilisateur
@@ -440,8 +436,9 @@ def statistics():
 def get_data():
     stocks = stocks_collection.find_one()
     # on récupére les users sous forme de dico
-    print(stocks)
+    #print(stocks)
     return jsonify(stocks['stocks'])
+
 
 # --------------------------------------- Programme principal ---------------------------------------
 
