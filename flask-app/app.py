@@ -2,6 +2,7 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 import json
 import stripe
 from pymongo import MongoClient
+from datetime import date
 
 # Se connecter à la base de données MongoDB
 client = MongoClient('mongodb://localhost:27017/')
@@ -10,6 +11,7 @@ db = client.commerce_db
 # Définir les collections
 users_collection = db['users']
 stocks_collection = db['stocks']
+cmd_collection = db['commandes']
 
 app = Flask(__name__, static_folder='./build/static', template_folder='./build')
 app.secret_key = 'my super secret key'.encode('utf8')
@@ -55,7 +57,6 @@ def add_user(id, password, type):
         print("L'utilisateur existe déjà")
 
 
-
 # Supprime un utilisateur de la base
 @app.route('/delete_user/<usertodel>')
 def delete_user(usertodel):
@@ -63,32 +64,43 @@ def delete_user(usertodel):
 
         # Superviseur est un utilisateur intouchable
         if usertodel == "superviseur":
-            return render_template('index.html',message="On ne peut pas supprimer le superviseur")
+            return render_template('index.html', message="On ne peut pas supprimer le superviseur")
 
         else:
-
             users_data = users_collection.find_one({})
-            # Vérifie si l'utilisateur à supprimer est un user ou un admin
-            if usertodel in users_data['users_list']['admin']:
-                del users_data['users_list']['admin'][usertodel]
-                users_collection.replace_one({}, users_data) # MAJ de la collection
-                return render_template('index.html',message="On a supprimé l'utilisateur"+ usertodel)
 
-            elif usertodel in users_data['users_list']['user']:
+            # Vérifie si l'utilisateur à supprimer est un user ou un admin
+            if users_data and usertodel in users_data['users_list']['admin']:
+                # Supprime l'admin
+                del users_data['users_list']['admin'][usertodel]
+                users_collection.replace_one({}, users_data)  # MAJ de la collection
+                # Si on supprime son propre compte, on se déconnecte
+                if usertodel == session['id']:
+                    print("Vous supprimez votre compte")
+                    return redirect(url_for('logout'))
+                return render_template('index.html', message="On a supprimé l'utilisateur" + usertodel)
+
+            elif users_data and usertodel in users_data['users_list']['user']:
+                # Supprime les commandes associées à l'utilisateur
+                Lcmd = list_cmd_user(usertodel).get_json()  # convertit fichier JSON en dictionnaire python
+                for num in Lcmd:
+                    suppr_cmd(num)
+                # Supprime l'utilisateur
                 del users_data['users_list']['user'][usertodel]
                 users_collection.replace_one({}, users_data)  # MAJ de la collection
-                return render_template('index.html',message="On a supprimé l'utilisateur"+ usertodel)
-
-            elif usertodel == session['id']:
-                print("Vous suprimez votre propre compte")
-                return redirect(url_for('logout'))
+                # Si on supprime son propre compte, on se déconnecte
+                if usertodel == session['id']:
+                    print("Vous supprimez votre compte")
+                    return redirect(url_for('logout'))
+                return render_template('index.html', message="On a supprimé l'utilisateur" + usertodel)
 
             else:
-                return render_template('index.html',message="L'utilisateur n'existe pas")
+                return render_template('index.html', message="L'utilisateur n'existe pas")
 
     else:
         # ERREUR !!!!
-        return render_template('index.html',message="Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
+        return render_template('index.html',
+                               message="Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
 
 
 # Page d'inscription pour les utilisateurs
@@ -145,7 +157,7 @@ def login():
 def logout():
     # si on se déco on détruit la session et retourne à l'acceuil
     session.clear()
-    #return redirect(url_for('/'))
+    # return redirect(url_for('/'))
     return render_template('index.html')
 
 
@@ -168,7 +180,6 @@ def user_to_admin(user):
         # Modif de l'user
         elif user in users_data['users_list']['user']:
             usertemp = users_data['users_list']['user'].get(user, {})
-            print(usertemp.get('id'))
             delete_user(user)
             add_user(usertemp.get('id'), usertemp.get('password'), "admin")
             print(user, "est maintenant administrateur")
@@ -201,7 +212,7 @@ def admin_to_user(user):
         # Modif de l'user
         elif user in users_data['users_list']['admin']:
             usertemp = users_data['users_list']['admin'].get(user, {})
-            #print(usertemp.get('id'))
+            # print(usertemp.get('id'))
             delete_user(user)
             add_user(usertemp.get('id'), usertemp.get('password'), "user")
             print(user, "est maintenant utilisateur")
@@ -217,13 +228,13 @@ def admin_to_user(user):
     return render_template('index.html')
 
 
-
 # --------------------------------------- Tableau de bord ---------------------------------------
 
 # tableau de bord admin avec gestion des users et commandes
 @app.route('/admin')
 def admin():
     return render_template('index.html')
+
 
 # tableau de bord user avec panier etc.
 @app.route('/userdashboard/<user>')
@@ -256,7 +267,6 @@ def dashboard():
 
 # Page pour mettre à jour le total du panier
 def UpdateTotalCart(user,stock):
-
     # Calcul du total du panier
     total = 0
     for item in user["users_list"]["user"][session['id']]["panier"]["content"]:
@@ -268,25 +278,21 @@ def UpdateTotalCart(user,stock):
     return total
 
 
-
 @app.route('/AddCart/<product>')
 def AddCart(product):
-    print(session['id'])
-    print(session['type'])
     if session['type'] == "user":
 
         # Mettre à jour les données du stock dans la collection 'stocks'
         query = {"stocks." + product: {"$exists": True}}
         stock = stocks_collection.find_one(query)
 
-        print(stock)
         if stock:
             if stock["stocks"][product]["quantity"] > 0:
 
                 # Récupérer l'utilisateur actuel depuis la collection 'users'
                 user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
 
-                print(user)
+                #print(user)
 
                 if user:
                     # Mettre à jour le panier de l'utilisateur
@@ -321,9 +327,7 @@ def AddCart(product):
         else:
             print("Le produit n'existe pas dans le stock.")
 
-
     return redirect(url_for("index"))
-
 
 
 @app.route('/DelCart/<product>')
@@ -369,10 +373,7 @@ def DelCart(product):
     return redirect(url_for("index"))
 
 
-
-
 # --------------------------------------- Paiement ---------------------------------------
-
 
 # Page de paiement
 @app.route("/payment", methods=["POST"])
@@ -440,8 +441,161 @@ def statistics():
 def get_data():
     stocks = stocks_collection.find_one()
     # on récupére les users sous forme de dico
-    print(stocks)
+    #print(stocks)
     return jsonify(stocks['stocks'])
+
+
+# --------------------------------------- Gestion des commandes ---------------------------------------
+
+# Après le paiement, on crée une commande
+def create_cmd(user):
+    # Récupérer les données du panier de l'utilisateur
+    users_data = users_collection.find_one({})
+    panier = users_data['users_list'].get('user', {}).get(user).get('panier')
+    # Récupérer l'indice de la nouvelle commande
+    cmd_data = cmd_collection.find_one({})
+    num = str(max(int(key) for key in cmd_data['commandes'].keys()) + 1)
+
+    if cmd_data and users_data:
+        if panier['Vide'] == 'True':
+            print("Erreur, on ne peut pas créer de commande à partir d'un panier vide")
+        else:
+            # On crée une nouvelle commande
+            new_cmd = {
+                num: {
+                    "client": user,
+                    "date": date.today().strftime("%d/%m/%Y"),
+                    "status": "En cours",
+                    "prix": 99999999,
+                    "contenu": panier['content']
+                }
+            }
+            cmd_data['commandes'].update(new_cmd)
+            cmd_collection.replace_one({}, cmd_data)  # MAJ la BDD avec les nouvelles données
+
+            # On vide le panier de l'utilisateur
+            panier['Vide'] = 'True'
+            panier['content'] = {}
+            users_collection.replace_one({}, users_data)  # MAJ la BDD avec les nouvelles données
+
+    # Rediriger vers le site web adapté à la personne connectée
+    return redirect(url_for('userdashboard', user=id))
+
+
+# Supprimer une commande
+@app.route("/suppr_cmd/<num>")
+def suppr_cmd(num):
+    cmd_data = cmd_collection.find_one({})
+    if cmd_data:
+        if num in cmd_data["commandes"]:
+            # Supprimer la commande
+            del cmd_data["commandes"][num]
+            cmd_collection.replace_one({}, cmd_data)
+            print("La commande n°", num, " a bien été supprimée")
+        else:
+            print("La commande n°", num, " n'existe pas")
+    return render_template('index.html')
+
+
+# Récupère la liste des commandes d'un user
+def list_cmd_user(user):
+    # Récupère les données de la base
+    users_data = users_collection.find_one({})
+    cmd_data = cmd_collection.find_one({})
+
+    # Vérifie si l'utilisateur existe
+    if users_data and user in users_data['users_list'].get('user', {}):
+        if cmd_data:
+            listCmd = {}
+            # Parcourt toutes les commandes
+            for num, cmd in cmd_data["commandes"].items():
+                if cmd['client'] == user:
+                    # Construit un json avec les commandes de l'utilisateur
+                    listCmd[num] = cmd
+            if listCmd == {}:
+                print("L'utilisateur n'a pas encore réalisé de commandes")
+            else:
+                print("Je retourne ça\n", listCmd)
+                return jsonify(listCmd)  # Retourne le fichier json
+    else:
+        print("L'utilisateur n'existe pas")
+
+    return jsonify({})
+
+
+# Récupère la liste des commandes à préparer pour le dashboard ADMIN
+def list_cmd_encours():
+    if session['type'] == "admin":
+        cmd_data = cmd_collection.find_one({})
+        if cmd_data:
+            listCmd = {}
+            # Parcourt toutes les commandes
+            for num, cmd in cmd_data["commandes"].items():
+                # Construit un json avec les commandes en cours
+                if cmd['status'] == 'En cours':
+                    listCmd[num] = cmd
+            if listCmd == {}:
+                print("Il n'y a aucune commande à préparer")
+            else:
+                return jsonify(listCmd)  # Retourne le fichier json
+
+    else:
+        print("Erreur, vous n'êtes pas admin, vous ne pouvez pas accéder aux status des commandes")
+
+    return jsonify({})
+
+
+# Récupère la liste des commandes terminé pour le dashboard ADMIN
+def list_cmd_term():
+    if session['type'] == "admin":
+        cmd_data = cmd_collection.find_one({})
+        if cmd_data:
+            listCmd = {}
+            # Parcourt toutes les commandes
+            for num, cmd in cmd_data["commandes"].items():
+                # Construit un json avec les commandes en cours
+                if cmd['status'] == 'Terminé':
+                    listCmd[num] = cmd
+            if listCmd == {}:
+                print("Il n'y a aucune commande terminée")
+            else:
+                return jsonify(listCmd)  # Retourne le fichier json
+
+    else:
+        print("Erreur, vous n'êtes pas admin, vous ne pouvez pas accéder aux status des commandes")
+
+    return jsonify({})
+
+
+# Modifie le status d'une commande pour la mettre en Terminé
+def terminer_cmd(num):
+    if session['type'] == "admin":
+        cmd_data = cmd_collection.find_one({})
+        if cmd_data and num in cmd_data['commandes']:
+            cmd = cmd_data['commandes'][num]
+            cmd['status'] = 'Terminé'
+            cmd_data['commandes'].update(cmd)
+            cmd_collection.replace_one({}, cmd_data)  # MAJ la BDD avec les nouvelles données
+        else:
+            print("La commande n°", num, " n'existe pas")
+    else:
+        print("Erreur, vous n'êtes pas admin, vous ne pouvez pas modifier le status des commandes")
+
+
+# Modifie le status d'une commande pour la mettre en En cours
+def encours_cmd(num):
+    if session['type'] == "admin":
+        cmd_data = cmd_collection.find_one({})
+        if cmd_data and num in cmd_data['commandes']:
+            cmd = cmd_data['commandes'][num]
+            cmd['status'] = 'En cours'
+            cmd_data['commandes'].update(cmd)
+            cmd_collection.replace_one({}, cmd_data)  # MAJ la BDD avec les nouvelles données
+        else:
+            print("La commande n°", num, " n'existe pas")
+    else:
+        print("Erreur, vous n'êtes pas admin, vous ne pouvez pas modifier le status des commandes")
+
 
 # --------------------------------------- Programme principal ---------------------------------------
 
