@@ -7,9 +7,13 @@ function Login() {
 
   return (
     <div className="Login">
-        <h1>Login</h1>
-        <div className="button-register">
-          
+        <div className="login-titles">
+          <div className="login-site-title">
+            <span className="the">THE</span>  
+            <span className="french">FRENCH</span> 
+            <span className = "flavor">FLAVOR</span>
+          </div>
+          <div className="login-connecter-title">SE CONNECTER</div>
         </div>
         <Formulaire />
 

@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session
-import json
 import stripe
 from pymongo import MongoClient
 
@@ -23,16 +22,12 @@ stripe.api_key = "secret_key"
 def index():
     return render_template('index.html')
 
-# Route permettant l'accès au json depuis le front
-# ==================
-#  NE PAS SUPPRIMER
-# ==================
 @app.route('/api/data')
 def get_data():
-    with open("stock.json", "r") as f:
-            # on récupére les users sous forme de dico
-            data = json.load(f)
-    return jsonify(data)
+    stocks = stocks_collection.find_one()
+    # on récupére les users sous forme de dico
+    print(stocks)
+    return jsonify(stocks['stocks'])
 
 
 # --------------------------------------- Gestion des users ---------------------------------------
@@ -308,6 +303,44 @@ def AddCart(product):
 
 
     return redirect(url_for("index"))
+
+
+
+@app.route('/DelCart/<product>')
+def DelCart(product):
+    if session['type'] == "user":
+        # Récupérer l'utilisateur actuel depuis la collection 'users'
+        user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
+
+        if user:
+            # Vérifier si le produit est présent dans le panier de l'utilisateur
+            if product in user["users_list"]["user"][session['id']]["panier"]["content"]:
+                # Réduire la quantité du produit dans le panier de l'utilisateur
+                user["users_list"]["user"][session['id']]["panier"]["content"][product] -= 1
+
+                # Si la quantité atteint 0, supprimer le produit du panier
+                if user["users_list"]["user"][session['id']]["panier"]["content"][product] == 0:
+                    del user["users_list"]["user"][session['id']]["panier"]["content"][product]
+
+                # Mettre à jour les données de l'utilisateur dans la collection 'users'
+                users_collection.update_one(
+                    {"users_list.user." + session['id']: {"$exists": True}},
+                    {"$set": {"users_list.user." + session['id']: user["users_list"]["user"][session['id']]}}
+                )
+
+                # Mettre à jour les données de stock dans la collection 'stocks'
+                stocks_collection.update_one(
+                    {"stocks.{}".format(product): {"$exists": True}},
+                    {"$inc": {"stocks.{}.quantity".format(product): 1}}
+                )
+
+            else:
+                print("Le produit n'est pas présent dans le panier de l'utilisateur.")
+        else:
+            print("Utilisateur non trouvé.")
+
+    return redirect(url_for("index"))
+
 
 
 

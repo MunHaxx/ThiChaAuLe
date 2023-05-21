@@ -1,3 +1,37 @@
 .Login{ 
     background-color: #0A3D62;
 }
+
+.login-titles {
+    text-align: center;
+    padding: 0 0 10px 0;
+}
+
+.login-site-title {
+    list-style: none;
+    padding: 20px 0 30px 0;
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 80px;
+    letter-spacing: 8px;
+}
+
+.the {
+    color: #4A69BD;
+    margin-right: 30px;
+}
+.french {
+    color: white;
+    margin-right: 30px;
+}
+
+.flavor {
+    color: #E55039;
+}
+
+.login-connecter-title {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-size: 35px;
+    font-weight: 500;
+    padding: 0 0 30px 0;
+}

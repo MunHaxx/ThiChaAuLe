@@ -1,18 +1,95 @@
 .containerFormulaire{
     display: flex;
-    width: 50%;
+    width: auto;
     height:calc(100vh - 73px); 
-    margin-left: 25%;
     background-color: #0A3D62;
     justify-content: center;
 }
 
-.imgLogin{
+.id-password-login {
     display: flex;
-    justify-content: left;
+    justify-content: center;
+    background-color: #0A3D62;
+    width: 400px;
+    height: 45px;
+    padding: 0;
+    border-radius: 0px;
+    border: 4px solid rgba(255, 255, 255, 0.45);
+    margin-left: -50%;
+    text-align: left;
+    margin-bottom: 30px;
 }
 
-.containerFormulaire img{
-    width: 400px;
-    height: auto;
+.id-password-login,
+input::placeholder {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+    color: white;
+    padding-left: 5px;
+}
+
+.connect-login {
+    background-color: rgba(229, 80, 57, 0.8);
+    color: white;
+    padding: 10px 90px;
+    text-align: center;
+    font-size: 25px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 900;
+    margin-left: -25%;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform .2s;
+}
+
+.connect-login:hover{
+    transform: scale(1.05);
+}
+
+
+.other-register {
+    margin-top: 40px;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.other-register a {
+    height: fit-content;
+    width: fit-content;
+}
+
+
+
+.oublie-mdp {
+    background-color: #0A3D62;
+    color: rgba(229, 80, 57, 0.8);
+    border: none;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    min-width: 226px;
+    margin-bottom: 30px;
+}
+
+.pas-de-compte {
+    min-width: 283px;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+    margin-left: -10%;
+}
+
+.inscrivez-vous {
+    background-color: #0A3D62;
+    color: rgba(229, 80, 57, 0.8);
+    border: none;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    min-width: 226px;
+    margin-top: 5px;
 }
