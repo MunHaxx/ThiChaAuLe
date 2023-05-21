@@ -26,13 +26,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/api/data')
-def get_data():
-    stocks = stocks_collection.find()
-    # on récupére les users sous forme de dico
-    return jsonify(stocks)
-
-
 # --------------------------------------- Gestion des users ---------------------------------------
 
 # Créer un nouvel utilisateur
@@ -62,7 +55,6 @@ def add_user(id, password, type):
 
     else:
         print("L'utilisateur existe déjà")
-
 
 
 # Supprime un utilisateur de la base
@@ -236,7 +228,6 @@ def admin_to_user(user):
     return render_template('index.html')
 
 
-
 # --------------------------------------- Tableau de bord ---------------------------------------
 
 # tableau de bord admin avec gestion des users et commandes
@@ -276,7 +267,6 @@ def dashboard():
 
 # Page pour mettre à jour le total du panier
 def UpdateTotalCart(user,stock):
-
     # Calcul du total du panier
     total = 0
     for item in user["users_list"]["user"][session['id']]["panier"]["content"]:
@@ -286,7 +276,6 @@ def UpdateTotalCart(user,stock):
 
     print("Total du panier:", total)
     return total
-
 
 
 @app.route('/AddCart/<product>')
@@ -346,42 +335,6 @@ def DelCart(product):
     if session['type'] == "user":
         # Récupérer l'utilisateur actuel depuis la collection 'users'
         user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
-
-        if user:
-            # Vérifier si le produit est présent dans le panier de l'utilisateur
-            if product in user["users_list"]["user"][session['id']]["panier"]["content"]:
-                # Réduire la quantité du produit dans le panier de l'utilisateur
-                user["users_list"]["user"][session['id']]["panier"]["content"][product] -= 1
-
-                # Si la quantité atteint 0, supprimer le produit du panier
-                if user["users_list"]["user"][session['id']]["panier"]["content"][product] == 0:
-                    del user["users_list"]["user"][session['id']]["panier"]["content"][product]
-
-                # Mettre à jour les données de l'utilisateur dans la collection 'users'
-                users_collection.update_one(
-                    {"users_list.user." + session['id']: {"$exists": True}},
-                    {"$set": {"users_list.user." + session['id']: user["users_list"]["user"][session['id']]}}
-                )
-
-                # Mettre à jour les données de stock dans la collection 'stocks'
-                stocks_collection.update_one(
-                    {"stocks.{}".format(product): {"$exists": True}},
-                    {"$inc": {"stocks.{}.quantity".format(product): 1}}
-                )
-
-            else:
-                print("Le produit n'est pas présent dans le panier de l'utilisateur.")
-        else:
-            print("Utilisateur non trouvé.")
-
-    return redirect(url_for("index"))
-
-
-@app.route('/DelCart/<product>')
-def DelCart(product):
-    if session['type'] == "user":
-        # Récupérer l'utilisateur actuel depuis la collection 'users'
-        user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
         query = {"stocks." + product: {"$exists": True}}
         stock = stocks_collection.find_one(query)
 
@@ -420,10 +373,7 @@ def DelCart(product):
     return redirect(url_for("index"))
 
 
-
-
 # --------------------------------------- Paiement ---------------------------------------
-
 
 # Page de paiement
 @app.route("/payment", methods=["POST"])
@@ -496,7 +446,6 @@ def get_data():
 
 
 # --------------------------------------- Gestion des commandes ---------------------------------------
-# Si suppr user -> suppr ses commandes avec
 
 # Après le paiement, on crée une commande
 def create_cmd(user):
@@ -537,7 +486,6 @@ def create_cmd(user):
 @app.route("/suppr_cmd/<num>")
 def suppr_cmd(num):
     cmd_data = cmd_collection.find_one({})
-
     if cmd_data:
         if num in cmd_data["commandes"]:
             # Supprimer la commande
@@ -546,7 +494,6 @@ def suppr_cmd(num):
             print("La commande n°", num, " a bien été supprimée")
         else:
             print("La commande n°", num, " n'existe pas")
-
     return render_template('index.html')
 
 
