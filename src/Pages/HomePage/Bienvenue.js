@@ -4,14 +4,15 @@ import imgBienvenue from "../../images/imgBienvenue.png"
 
 function Bienvenue() {
   return (
-    <div className="Bienvenue">
+    <div className="Page Bienvenue">
         <div className='title'>
-          <span class="the">THE</span>  
-          FRENCH 
-          <span class = "flavor">FLAVOR</span>
+          <div className="the">THE</div>  
+          <div className="french">FRENCH</div> 
+          <div className = "flavor">FLAVOR</div>
         </div>
         <div className='subtitle'>
-          BOX DE NOURRITURE <br />
+          BOX DE NOURRITURE 
+          <br />
           FRANÇAISE
         </div>
         <div className='image'><img alt="" src={imgBienvenue} /></div>

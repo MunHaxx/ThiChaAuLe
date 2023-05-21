@@ -15,11 +15,7 @@ users_data = {
         "admin": {
             "superviseur": {
                 "id": "superviseur",
-                "password": "123",
-                "panier": {
-                    "Vide": "True",
-                    "content": {}
-                }
+                "password": "123"
             }
         },
         "user": {
@@ -36,6 +32,7 @@ users_data = {
                 "password": "am",
                 "panier": {
                     "Vide": "True",
+                    "Total": "0",
                     "content": {}
                 }
             }

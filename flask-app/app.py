@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session
+import json
 import stripe
 from pymongo import MongoClient
 from datetime import date
@@ -45,6 +46,7 @@ def add_user(id, password, type):
                 "password": password,
                 "panier": {
                     "Vide": "True",
+                    "Total": "0",
                     "content": {}
                 }
             }
@@ -60,6 +62,7 @@ def add_user(id, password, type):
 
     else:
         print("L'utilisateur existe déjà")
+
 
 
 # Supprime un utilisateur de la base
@@ -166,6 +169,8 @@ def logout():
     return render_template('index.html')
 
 
+# --------------------------------------- Gestion des droits ---------------------------------------
+
 # Passe un utilisateur en administrateur (+ de droits)
 @app.route('/user_to_admin/<user>')
 def user_to_admin(user):
@@ -183,7 +188,6 @@ def user_to_admin(user):
         # Modif de l'user
         elif user in users_data['users_list']['user']:
             usertemp = users_data['users_list']['user'].get(user, {})
-            print(usertemp.get('id'))
             delete_user(user)
             add_user(usertemp.get('id'), usertemp.get('password'), "admin")
             print(user, "est maintenant administrateur")
@@ -199,7 +203,7 @@ def user_to_admin(user):
     return render_template('index.html')
 
 
-# Passe un utilisateur en administrateur (+ de droits)
+# Passe un administrateur en utilisateur (- de droits)
 @app.route('/admin_to_user/<user>')
 def admin_to_user(user):
     if session['type'] == "admin":
@@ -230,6 +234,7 @@ def admin_to_user(user):
         print("Vous n'êtes pas administrateur, vous ne pouvez pas supprimer un autre utilisateur")
 
     return render_template('index.html')
+
 
 
 # --------------------------------------- Tableau de bord ---------------------------------------
@@ -268,24 +273,37 @@ def dashboard():
 
 # --------------------------------------- Gestion des achats ---------------------------------------
 
+
+# Page pour mettre à jour le total du panier
+def UpdateTotalCart(user,stock):
+
+    # Calcul du total du panier
+    total = 0
+    for item in user["users_list"]["user"][session['id']]["panier"]["content"]:
+        quantity = user["users_list"]["user"][session['id']]["panier"]["content"][item]
+        price = stock["stocks"][item]["price"]
+        total += quantity * price
+
+    print("Total du panier:", total)
+    return total
+
+
+
 @app.route('/AddCart/<product>')
 def AddCart(product):
-    print(session['id'])
-    print(session['type'])
     if session['type'] == "user":
 
         # Mettre à jour les données du stock dans la collection 'stocks'
         query = {"stocks." + product: {"$exists": True}}
         stock = stocks_collection.find_one(query)
 
-        print(stock)
         if stock:
             if stock["stocks"][product]["quantity"] > 0:
 
                 # Récupérer l'utilisateur actuel depuis la collection 'users'
                 user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
 
-                print(user)
+                #print(user)
 
                 if user:
                     # Mettre à jour le panier de l'utilisateur
@@ -298,6 +316,12 @@ def AddCart(product):
                         else:
                             user["users_list"]["user"][session['id']]["panier"]["content"][product] = 1
 
+                    total = UpdateTotalCart(user,stock)
+
+                    # Mettre à jour le champ "Total" du panier de l'utilisateur
+                    user["users_list"]["user"][session['id']]["panier"]["Total"] = str(total)
+
+
                     # Mettre à jour les données de l'utilisateur dans la collection 'users'
                     users_collection.update_one(
                         {"users_list.user." + session['id']: {"$exists": True}},
@@ -308,7 +332,6 @@ def AddCart(product):
                         {"stocks.{}".format(product): {"$exists": True}},
                         {"$inc": {"stocks.{}.quantity".format(product): -1}}
                     )
-
 
             else:
                 print("Le produit est en rupture de stock.")
@@ -354,6 +377,54 @@ def DelCart(product):
     return redirect(url_for("index"))
 
 
+@app.route('/DelCart/<product>')
+def DelCart(product):
+    if session['type'] == "user":
+        # Récupérer l'utilisateur actuel depuis la collection 'users'
+        user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
+        query = {"stocks." + product: {"$exists": True}}
+        stock = stocks_collection.find_one(query)
+
+        if user:
+            # Vérifier si le produit est présent dans le panier de l'utilisateur
+            if product in user["users_list"]["user"][session['id']]["panier"]["content"]:
+                # Réduire la quantité du produit dans le panier de l'utilisateur
+                user["users_list"]["user"][session['id']]["panier"]["content"][product] -= 1
+
+                # Si la quantité atteint 0, supprimer le produit du panier
+                if user["users_list"]["user"][session['id']]["panier"]["content"][product] == 0:
+                    del user["users_list"]["user"][session['id']]["panier"]["content"][product]
+
+                total = UpdateTotalCart(user, stock)
+
+                # Mettre à jour le champ "Total" du panier de l'utilisateur
+                user["users_list"]["user"][session['id']]["panier"]["Total"] = str(total)
+
+                # Mettre à jour les données de l'utilisateur dans la collection 'users'
+                users_collection.update_one(
+                    {"users_list.user." + session['id']: {"$exists": True}},
+                    {"$set": {"users_list.user." + session['id']: user["users_list"]["user"][session['id']]}}
+                )
+
+                # Mettre à jour les données de stock dans la collection 'stocks'
+                stocks_collection.update_one(
+                    {"stocks.{}".format(product): {"$exists": True}},
+                    {"$inc": {"stocks.{}.quantity".format(product): 1}}
+                )
+
+            else:
+                print("Le produit n'est pas présent dans le panier de l'utilisateur.")
+        else:
+            print("Utilisateur non trouvé.")
+
+    return redirect(url_for("index"))
+
+
+
+
+# --------------------------------------- Paiement ---------------------------------------
+
+
 # Page de paiement
 @app.route("/payment", methods=["POST"])
 def payment():
@@ -374,7 +445,54 @@ def payment():
 # page de paiement réussi
 @app.route("/payment_succes")
 def payment_succes():
-    render_template("index.html")
+    render_template("index.html", message = "paiement succesfull")
+
+
+# --------------------------------------- Récupéré statistique ---------------------------------------
+
+def calculate_statistics():
+    # Récupérer les données de tous les utilisateurs depuis la collection 'users'
+    users_data = users_collection.find_one({})
+
+    # Initialiser un dictionnaire pour stocker les statistiques
+    statistics = {
+        "total_sales": 0,
+        "bestsellers": {}
+    }
+
+    # Parcourir tous les utilisateurs et leurs paniers
+    for user_type in ["admin", "user"]:
+        users = users_data["users_list"].get(user_type, {})
+        for user_id, user_info in users.items():
+            panier = user_info.get("panier", {}).get("content", {})
+
+            # Mettre à jour les statistiques pour chaque produit dans le panier
+            for product, quantity in panier.items():
+                statistics["total_sales"] += quantity
+                if product in statistics["bestsellers"]:
+                    statistics["bestsellers"][product] += quantity
+                else:
+                    statistics["bestsellers"][product] = quantity
+
+    # Trier les bestsellers par quantité vendue (du plus élevé au plus bas)
+    bestsellers = sorted(statistics["bestsellers"].items(), key=lambda x: x[1], reverse=True)
+    statistics["bestsellers"] = bestsellers
+
+    return statistics
+
+
+@app.route('/Getstatistics')
+def statistics():
+    stats = calculate_statistics()
+    return render_template('index.html', statistics=stats)
+
+
+@app.route('/api/data')
+def get_data():
+    stocks = stocks_collection.find_one()
+    # on récupére les users sous forme de dico
+    #print(stocks)
+    return jsonify(stocks['stocks'])
 
 
 # --------------------------------------- Gestion des commandes ---------------------------------------

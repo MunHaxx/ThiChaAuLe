@@ -1,11 +1,10 @@
 .Temoignages {
-    height:auto;
-    min-height: calc(100vh - 73px);
     background-color: #0A3D62; 
     color: white;
+    padding-bottom: 50px;
 }
 
-.tem-title{
+.Temoignages .title{
     font-family: 'Hammersmith One', sans-serif;
     font-size: 50px;
     font-weight: 700;
@@ -13,40 +12,92 @@
     border-top: 100px solid #0A3D62;
 }
 
-.Temoignages .container{
+.Temoignages .quotes-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding: 50px 75px 30px;
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 20px;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 70px 20vw;
 }
 
-.quote {
+.Temoignages .quote {
     display:flex;
     flex-direction:column;
     justify-content: center;
-    width: 45%;
+    width: 400px;
     height: 400px;
-    min-width: 300px;
+    min-width: 350px;
+    box-sizing: border-box;
 }
 
-.quote .icon-quote{
+.Temoignages .quote .icon-quote{
     display: flex;
     justify-content: left;
-    width: 30px;
+    width: 46px;
     height: auto;
+    margin-bottom: 30px;
 }
 
-.quote .quote-title{
+.Temoignages .quote-title{
     font-family: 'Hammersmith One', sans-serif;
-    margin-top: 30px;
-    font-size: 20px;
+    margin-bottom: 15px;
+    font-size: 28px;
 }
 
-.quote .quote-container{
+.Temoignages .info-container{
     font-family: 'Hanken Grotesk', sans-serif;
 
+}
+
+.Temoignages .quote-text {
+    width:400px;
+    margin-bottom:20px;
+    font-size: 20px
+}
+
+.Temoignages .quote-author {
+    font-size: 18px
+}
+
+@media screen and (max-width:1240px) {
+    .Temoignages .quotes-container {
+        gap: 70px 8vw;
+    }
+}
+@media screen and (max-width:1080px) {
+    .Temoignages .quotes-container {
+        gap: 70px 2vw;
+    }
+}
+
+@media screen and (max-width:1024px) {
+}
+
+@media screen and (max-width: 768px) {
+}
+
+@media screen and (max-width: 480px) {
+    .Temoignages .quotes-container {
+        padding-top:20px;
+    }
+
+    .Temoignages .quote .icon-quote{
+        width: 35px;
+    }
+    
+    .Temoignages .quote-title{
+        font-size: 25px;
+    }
+    
+    .Temoignages .quote-text {
+        width: 280px;
+        font-size: 18px;
+    }
+    
+    .Temoignages .quote-author {
+        font-size: 16px;
+    }
 }

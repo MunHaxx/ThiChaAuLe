@@ -4,7 +4,7 @@ import imgContact from "../../images/imgContact.jpg";
 
 function Contact() {
   return (
-    <div className="Contact">
+    <div className="Page Contact">
         <div className="container">
           <div className='contact-img-container'><img className='contact-img' alt="" src={imgContact} /></div>
           <div className="information-container">

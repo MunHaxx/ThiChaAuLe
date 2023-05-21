@@ -1,43 +1,78 @@
 .Bienvenue {
-    height:calc(100vh - 73px); 
     background-color: #0A3D62; 
     color: white;
     text-align: center;
+    padding: 20px 0 20px 0;
+   
 }
 
-.title {
+.Bienvenue .title {
     list-style: none;
     padding: 40px;
     font-family: 'Hammersmith One', sans-serif;
     font-size: 100px;
-    border-top: 20px solid #0A3D62;
     letter-spacing: 2px;
+    display: flex;
+    justify-content: center;
 }
 
-.the {
+.Bienvenue .the {
     color: #4A69BD;
     margin-right: 30px;
 }
-
-.flavor {
-    color: #E55039;
-    margin-left: 30px;
+.Bienvenue .french {
+    color: white;
+    margin-right: 30px;
 }
 
-.subtitle {
+.Bienvenue .flavor {
+    color: #E55039;
+}
+
+.Bienvenue .subtitle {
     font-family: 'Roboto Slab', Serif;
     font-size: 30px;
     font-weight: 600;
 }
 
-.image {
+.Bienvenue .image {
     display: flex;
     justify-content: center;
-    margin-top: -50px;
 }
 
 .Bienvenue img {
-    width: 750px;
+    width: 100%;
+    max-width: 900px;
     height: auto;
 }
 
+
+@media screen and (max-width:1024px) {
+    .Bienvenue .title {
+        font-size: 70px;
+    }
+
+    .Bienvenue .subtitle {
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .Bienvenue .title {
+        font-size: 50px;
+        flex-direction: column;
+    }
+
+    .Bienvenue .subtitle {
+        font-size: 20px;
+    }
+
+    .Bienvenue .the, .Bienvenue .french {
+        margin-right: 0px;
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+}
