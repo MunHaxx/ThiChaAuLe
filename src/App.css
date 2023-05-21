@@ -2,6 +2,6 @@
 .carréDansLaxe {background-color: green; width:200px; height:200px; display: flex; justify-content: center; align-items: center;}
 .bulbizarre {width:150px; height:150px;}
 .containerBulbizarre {display: flex}
-.inputContainer {display: flex; flex-direction: column; width:200px}
+.inputContainer {display: flex; flex-direction: column; width:200px; height: 50px}
 
 .Page {height:auto; min-height:calc(100vh - 80px); box-sizing: border-box;}

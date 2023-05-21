@@ -1,7 +1,7 @@
 .containerFormulaire{
     display: flex;
     width: auto;
-    height:calc(100vh - 73px); 
+    height:calc(100vh - 80px); 
     background-color: #0A3D62;
     justify-content: center;
 }
@@ -45,51 +45,4 @@ input::placeholder {
 
 .connect-login:hover{
     transform: scale(1.05);
-}
-
-
-.other-register {
-    margin-top: 40px;
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.other-register a {
-    height: fit-content;
-    width: fit-content;
-}
-
-
-
-.oublie-mdp {
-    background-color: #0A3D62;
-    color: rgba(229, 80, 57, 0.8);
-    border: none;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 600;
-    font-size: 20px;
-    min-width: 226px;
-    margin-bottom: 30px;
-}
-
-.pas-de-compte {
-    min-width: 283px;
-    font-family: 'Open Sans', sans-serif;
-    color: white;
-    font-weight: 600;
-    font-size: 20px;
-    margin-left: -10%;
-}
-
-.inscrivez-vous {
-    background-color: #0A3D62;
-    color: rgba(229, 80, 57, 0.8);
-    border: none;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 600;
-    font-size: 20px;
-    min-width: 226px;
-    margin-top: 5px;
 }

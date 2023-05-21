@@ -1,3 +1,15 @@
 .Register{ 
     background-color: #0A3D62;
 }
+
+.register-page {
+    text-align: center;
+}
+
+.register-site-title {
+    list-style: none;
+    padding: 20px 0 30px 0;
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 80px;
+    letter-spacing: 8px;
+}

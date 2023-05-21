@@ -2,7 +2,7 @@
     background-color: #0A3D62;
 }
 
-.login-titles {
+.login-and-register {
     text-align: center;
     padding: 0 0 10px 0;
 }
@@ -34,4 +34,59 @@
     font-size: 35px;
     font-weight: 500;
     padding: 0 0 30px 0;
+}
+
+.other-register {
+    margin-top: -40%;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform .2s;
+}
+
+.other-register a {
+    height: 30px;
+    width: fit-content;
+    margin-bottom: 30px;
+}
+
+.oublie-mdp {
+    width: 100vw;
+    background-color: #0A3D62;
+    color: rgba(229, 80, 57, 0.8);
+    border: none;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    min-width: 226px;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+
+.oublie-mdp a {
+    height: 30px;
+    width: auto;
+}
+
+.pas-de-compte {
+    width: 100vw;
+    min-width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.inscrivez-vous {
+    width: 100vw;
+    background-color: #0A3D62;
+    color: rgba(229, 80, 57, 0.8);
+    border: none;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    min-width: 100%;
+    margin-top: 5px;
 }
