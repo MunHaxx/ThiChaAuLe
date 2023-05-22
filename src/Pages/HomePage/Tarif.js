@@ -23,17 +23,23 @@ function Tarif() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get('/api/data');
+      // const result = await axios.get('http://127.0.0.1:5000/api/data').then(function (response) {
+      //   console.log(response.data.stocks);  
+      //   setData(response.data.stocks);
+      //   console.log(response.data.stocks);
+      //   setIsLoading(false);
+      const result = await axios.get('http://127.0.0.1:5000/api/data');
       setData(result.data.stocks);
-      //setIsLoading(false);
+      console.log(data);
     };
+
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log(data)
-    console.log(isLoading)
-  }, []);
+  // useEffect(() => {
+  //   console.log(data)
+  //   console.log(isLoading)
+  // }, []);
 
   return (
     <div className="Page Tarif">
