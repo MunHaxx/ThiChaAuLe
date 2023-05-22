@@ -23,12 +23,14 @@ function Tarif() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get('/api/data');
-      setData(result.data.stocks);
-      //setIsLoading(false);
+      axios.get("http://127.0.0.1:5000/api/data").then(res => {
+        setData(res.data);
+        setIsLoading(false);
+      })
     };
+
     fetchData();
-  }, []);
+  }, [data]);
 
   return (
     <div className="Page Tarif">

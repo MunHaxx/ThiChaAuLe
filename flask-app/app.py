@@ -2,6 +2,7 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 import json
 import stripe
 from pymongo import MongoClient
+import os 
 from datetime import date
 
 # Se connecter à la base de données MongoDB
@@ -14,6 +15,19 @@ stocks_collection = db['stocks']
 cmd_collection = db['commandes']
 
 app = Flask(__name__, static_folder='./build/static', template_folder='./build')
+app.debug = True
+
+# Obtient le chemin absolu du répertoire de l'application Flask
+#app_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Spécifie les répertoires statiques et les modèles
+#static_folder = os.path.join(app_dir, 'build/static')
+#template_folder = os.path.join(app_dir, 'build')
+
+# Configure l'application Flask avec les répertoires appropriés
+#app.static_folder = static_folder
+#app.template_folder = template_folder
+
 app.secret_key = 'my super secret key'.encode('utf8')
 
 # configuration de l'interface de paiement
@@ -25,6 +39,9 @@ stripe.api_key = "secret_key"
 def index():
     return render_template('index.html')
 
+@app.route('/manifest.json')
+def serve_manifest():
+    return app.send_static_file('manifest.json')
 
 # --------------------------------------- Gestion des users ---------------------------------------
 
@@ -271,7 +288,8 @@ def UpdateTotalCart(user,stock):
     total = 0
     for item in user["users_list"]["user"][session['id']]["panier"]["content"]:
         quantity = user["users_list"]["user"][session['id']]["panier"]["content"][item]
-        price = stock["stocks"][item]["price"]
+        print(stock)
+        price = stock['stocks'][item]['tarifs']
         total += quantity * price
 
     print("Total du panier:", total)
@@ -437,12 +455,15 @@ def statistics():
     return render_template('index.html', statistics=stats)
 
 
-@app.route('/api/data')
+@app.route('/api/data', methods=['GET', 'POST'])
 def get_data():
     stocks = stocks_collection.find_one()
     # on récupére les users sous forme de dico
-    #print(stocks)
-    return jsonify(stocks['stocks'])
+    # print("hello")
+
+    response = jsonify(stocks['stocks'])
+    #response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 
 # --------------------------------------- Gestion des commandes ---------------------------------------
