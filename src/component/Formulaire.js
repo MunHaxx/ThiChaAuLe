@@ -1,18 +1,15 @@
 import React from "react";
 import "./Formulaire.css"
-import { Link } from 'react-router-dom'
 
 function Formulaire() {
 
     return (
       <div className="containerFormulaire">
-
         <div className="inputContainer">
           <form method="post">
-            <input id="id" type="text" name="id" placeholder="ID"/>
-            <input id="password" type="password" name="password" placeholder="Password"/>
-            <button type="submit" value="valider">Valider</button>
-            <button><Link to="/register">Créer un compte</Link></button>
+            <input className="id-password-login" type="text" name="id" placeholder="nom d'utilisateur"/>
+            <input className="id-password-login" type="password" name="password" placeholder="mot de passe"/>
+            <button className="connect-login" type="submit" value="valider">Connexion</button>
           </form>
         </div>
       </div>

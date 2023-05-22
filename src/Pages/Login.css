@@ -1,3 +1,98 @@
 .Login{ 
     background-color: #0A3D62;
 }
+
+.Login .login-and-register {
+    text-align: center;
+    padding: 0 0 10px 0;
+}
+
+.Login .login-site-title {
+    list-style: none;
+    padding: 20px 0 30px 0;
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 80px;
+    letter-spacing: 8px;
+}
+
+.the {
+    color: #4A69BD;
+    margin-right: 30px;
+}
+.french {
+    color: white;
+    margin-right: 30px;
+}
+
+.flavor {
+    color: #E55039;
+}
+
+.Login .login-connecter-title {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-size: 35px;
+    font-weight: 500;
+    padding: 0 0 30px 0;
+}
+
+.Login .other-register {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Login .other-register a {
+    height: 30px;
+    width: auto;
+    margin: 0 0 30px 0;
+
+}
+
+.Login .oublie-mdp {
+    width: 100vw;
+    margin-bottom: 30px;
+}
+
+.Login .oublie-mdp a {
+    text-decoration: none;
+    background-color: #0A3D62;
+    color: rgba(229, 80, 57, 0.8);
+    border: none;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    min-width: 226px;
+    height: 30px;
+    width: 60px;
+    cursor: pointer;
+}
+
+.Login .pas-de-compte {
+    width: 100vw;
+    min-width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.Login .inscrivez-vous {
+    background-color: #0A3D62;
+}
+
+.Login .inscrivez-vous a{
+    text-decoration: none;
+    font-style: none;
+    width: 100vw;
+    background-color: #0A3D62;
+    color: rgba(229, 80, 57, 0.8);
+    border: none;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    min-width: 100%;
+    margin-top: 5px;
+    cursor: pointer;
+}
