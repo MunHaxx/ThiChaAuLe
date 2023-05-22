@@ -43,6 +43,7 @@ def index():
 def serve_manifest():
     return app.send_static_file('manifest.json')
 
+
 # --------------------------------------- Gestion des users ---------------------------------------
 
 # Créer un nouvel utilisateur
@@ -158,7 +159,7 @@ def login():
             session['type'] = 'admin' if user['users_list'].get('admin', {}).get(id) else 'user'
 
             # Rediriger vers le site web adapté à la personne connectée
-            return redirect(url_for('userdashboard', user=id))
+            return redirect(url_for('dashboard'))
 
         else:
             # Si l'utilisateur n'existe pas ou le mot de passe est incorrect
@@ -248,19 +249,19 @@ def admin_to_user(user):
 # --------------------------------------- Tableau de bord ---------------------------------------
 
 # tableau de bord admin avec gestion des users et commandes
-@app.route('/admin')
-def admin():
+@app.route('/admindashboard')
+def admindashboard():
     return render_template('index.html')
 
 
 # tableau de bord user avec panier etc.
-@app.route('/userdashboard/<user>')
-def userdashboard(user):
+@app.route('/userdashboard')
+def userdashboard():
     # Récupérer les données de l'utilisateur depuis la collection 'users'
-    user_data = users_collection.find_one({"users_list.user": {user: {"$exists": True}}})
+    user_data = users_collection.find_one({"users_list.user": {session['id']: {"$exists": True}}})
 
-    if user_data and user_data["users_list"]["user"][user]["panier"]["Vide"] == "False":
-        return jsonify(user_data["users_list"]["user"][user]["panier"]["content"])
+    if user_data and user_data["users_list"]["user"][session['id']]["panier"]["Vide"] == "False":
+        return jsonify(user_data["users_list"]["user"][session['id']]["panier"]["content"])
 
     return render_template('index.html')
 
@@ -269,11 +270,11 @@ def userdashboard(user):
 @app.route('/dashboard')
 def dashboard():
     # on verifie que le user est co
-    if 'id' in session:
-        if 'id' == "admin":
-            return redirect(url_for('admin'))
+    if 'type' in session:
+        if session['type'] == "admin":
+            return redirect(url_for('admindashboard'))
         else:
-            return redirect(url_for('userdashboard', user=id))
+            return redirect(url_for('userdashboard'))
     # sinon on lui dis de se co
     else:
         return redirect(url_for('login'))
@@ -328,7 +329,6 @@ def AddCart(product):
                     # Mettre à jour le champ "Total" du panier de l'utilisateur
                     user["users_list"]["user"][session['id']]["panier"]["Total"] = str(total)
 
-
                     # Mettre à jour les données de l'utilisateur dans la collection 'users'
                     users_collection.update_one(
                         {"users_list.user." + session['id']: {"$exists": True}},
@@ -339,6 +339,8 @@ def AddCart(product):
                         {"stocks.{}".format(product): {"$exists": True}},
                         {"$inc": {"stocks.{}.quantity".format(product): -1}}
                     )
+
+                    return redirect(url_for("panier"))
 
             else:
                 print("Le produit est en rupture de stock.")
@@ -500,7 +502,7 @@ def create_cmd(user):
             users_collection.replace_one({}, users_data)  # MAJ la BDD avec les nouvelles données
 
     # Rediriger vers le site web adapté à la personne connectée
-    return redirect(url_for('userdashboard', user=id))
+    return redirect(url_for('userdashboard'))
 
 
 # Supprimer une commande
