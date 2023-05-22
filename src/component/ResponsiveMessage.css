@@ -1,0 +1,13 @@
+.responsive-message {
+    display: none;
+    background-color: #0A3D62;
+    padding:50px;
+    color:white;
+    font-size:50px
+}
+
+@media screen and (max-width:1130px) {
+    .responsive-message {
+        display:block;
+    }
+}

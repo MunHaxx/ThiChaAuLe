@@ -9,6 +9,7 @@ import Tarif from './Pages/HomePage/Tarif';
 import Panier from './Pages/Panier';
 import Admin from './Pages/Dashboard/Admin';
 import User from './Pages/Dashboard/User';
+import Payment from './component/Payment';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/userdashboard" element={<User />} />
+          <Route path="/payment" element={<Payment />} />
 
         </Routes>
 

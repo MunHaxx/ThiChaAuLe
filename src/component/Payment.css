@@ -1,0 +1,165 @@
+.Payment {
+    background-color: #0A3D62; 
+    color: white;
+    padding: 20px 0 20px 0;
+}
+
+.Payment .title {
+    list-style: none;
+    padding-top:40px;
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 100px;
+    letter-spacing: 2px;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.Payment .the {
+    color: #4A69BD;
+    margin-right: 30px;
+}
+.Payment .french {
+    color: white;
+    margin-right: 30px;
+}
+
+.Payment .flavor {
+    color: #E55039;
+}
+
+.Payment .content {
+    padding: 0 50px;
+}
+
+.Payment .title-paiement {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 60px;
+}
+
+.Payment .ligne {
+    display: flex;
+    align-items: center;
+    width:800px;
+    height:40px;
+    padding:0 3px 0 20px;
+    margin-bottom: 25px;
+    box-sizing: border-box;
+    font-size: 20px;
+}
+
+.Payment .texte {
+    width:200px;
+    display: flex;
+    justify-content: right;
+    margin-right: 20px;
+}
+
+input[type="text"] {
+    all: unset;
+}
+
+.Payment .ligne input {
+    height:100%;
+    background-color: #0A3D62;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 0 5px;
+}
+
+.Payment .ligne.courte input {
+    width: 500px;
+}
+
+.Payment .ligne-longue {
+    display: flex;
+    width: 800px;
+}
+
+.Payment .ligne.longue input {
+    width: 100px;
+}
+
+.Payment .ligne-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width:750px;
+    height:40px;
+    border: 1px solid white;
+    padding:0 3px 0 20px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.Payment .total
+{
+    font-size: 20px;
+}
+
+.Payment .button-container {
+    display: flex;
+    justify-content: space-between;
+    height: 100%; 
+    align-items: center;
+}
+
+.Payment a {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    overflow: visible;
+    text-decoration: none;
+
+    background: transparent;
+
+    color: inherit;
+    font: inherit;
+
+    font-weight: bold;
+    height:90%;
+    width:150px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Payment a:first-child {
+    margin-right:25px;
+    background-color:#E55039;
+}
+
+.Payment a:last-child {
+    background-color: #4A69BD;
+}
+
+.Payment .payment-container {
+    margin-bottom: 50px;
+}
+
+.Payment .error {
+    width: 750px;
+    background-color: white;
+    color:#0A3D62;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 20px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    display:none;
+    
+}
+
+@media screen and (max-width:1130px) {
+    .Payment {
+        display: none;
+    }
+}
