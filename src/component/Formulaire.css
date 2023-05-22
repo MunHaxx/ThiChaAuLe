@@ -1,18 +1,49 @@
 .containerFormulaire{
     display: flex;
-    width: 50%;
-    height:calc(100vh - 73px); 
-    margin-left: 25%;
+    width: auto;
+    height:calc(100vh - 80px); 
     background-color: #0A3D62;
     justify-content: center;
+    margin-bottom: -35%;
 }
 
-.imgLogin{
+.containerFormulaire .id-password-login {
     display: flex;
-    justify-content: left;
+    justify-content: center;
+    background-color: #0A3D62;
+    width: 400px;
+    height: 45px;
+    padding: 0;
+    border-radius: 0px;
+    border: 4px solid rgba(255, 255, 255, 0.45);
+    margin-left: -50%;
+    text-align: left;
+    margin-bottom: 30px;
 }
 
-.containerFormulaire img{
-    width: 400px;
-    height: auto;
+.containerFormulaire .id-password-login,
+input::placeholder {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+    color: white;
+    padding-left: 5px;
+}
+
+.containerFormulaire .connect-login {
+    background-color: rgba(229, 80, 57, 0.8);
+    color: white;
+    padding: 10px 90px;
+    text-align: center;
+    font-size: 25px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 900;
+    margin-left: -25%;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform .2s;
+}
+
+.containerFormulaire .connect-login:hover{
+    transform: scale(1.05);
 }

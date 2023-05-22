@@ -6,7 +6,14 @@ function Register() {
 
   return (
     <div className="Register">
-        <h1>Register</h1>
+        <div className="register-page">
+          <div className="login-site-title">
+            <span className="the">THE</span>  
+            <span className="french">FRENCH</span> 
+            <span className = "flavor">FLAVOR</span>
+          </div>
+          <div className="login-connecter-title">S'ENREGISTRER</div>
+        </div>
         <Formulaire />
     </div>
   );
