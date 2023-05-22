@@ -6,7 +6,6 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 function User() {
-
   const [enCours, setEnCours] = useState([]);
   const [isLoadingEnCours, setIsLoadingEnCours] = useState(true);
 
@@ -16,13 +15,13 @@ function User() {
   useEffect(() => {
     const fetchData = async () => {
         if (isLoadingEnCours) {
-          axios.get("http://127.0.0.1:5000/...").then(res => {
+          axios.get("http://127.0.0.1:5000/list_cmd_user_encours").then(res => {
             setEnCours(res.data);
             setIsLoadingEnCours(false);
           })
         }
         if (isLoadingTerminer) {
-            axios.get("http://127.0.0.1:5000/...").then(res => {
+            axios.get("http://127.0.0.1:5000//list_cmd_user_term").then(res => {
                 setTerminer(res.data);
                 setIsLoadingTerminer(false);
             })

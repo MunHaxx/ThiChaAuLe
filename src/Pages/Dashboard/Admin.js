@@ -5,8 +5,43 @@ import ResponsiveMessage from '../../component/ResponsiveMessage'
 
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Admin() {
+  const navigate = useNavigate();
+
+  function suppression(number) {
+    navigate('/suppr_cmd/' + number);
+    window.location.reload();
+  }
+
+  function terminerCommand(number) {
+    navigate('/terminer_cmd/' + number);
+    window.location.reload();
+  }
+
+  function enCoursCommand(number) {
+    navigate('/encours_cmd/' + number);
+    window.location.reload();
+  }
+
+  function switchRole(user, role) {
+    if (role === "admin") {
+      navigate('/admin_to_user/' + user);
+      window.location.reload();
+    } else {
+      navigate('/user_to_admin/' + user);
+      window.location.reload();
+    }
+    
+  }
+
+  function deleteUser(user) {
+    navigate('/delete_user/' + user);
+    window.location.reload();
+    
+  }
+
   const [enCours, setEnCours] = useState([]);
   const [isLoadingEnCours, setIsLoadingEnCours] = useState(true);
 
@@ -22,22 +57,24 @@ function Admin() {
             axios.get("http://127.0.0.1:5000/list_cmd_encours").then(res => {
                 setEnCours(res.data);
                 setIsLoadingEnCours(false);
+                console.log(res.data);
+                console.log(isLoadingEnCours);
             })
         }
         if (isLoadingTerminer) {
-            axios.get("http://127.0.0.1:5000/...").then(res => {
+            axios.get("http://127.0.0.1:5000/list_cmd_term").then(res => {
                 setTerminer(res.data);
                 setIsLoadingTerminer(false);
+                console.log(res.data);
+                console.log(isLoadingTerminer);
             })
         }
         if (isLoadingUsers) {
-            axios.get("http://127.0.0.1:5000/...").then(res => {
+            axios.get("http://127.0.0.1:5000/list_users").then(res => {
                 setUsers(res.data);
                 setIsLoadingUsers(false);
             })
         }
-
-
       //Est ce qu'on a un truc aussi pour les stats
     };
 
@@ -68,7 +105,7 @@ function Admin() {
             <div className="sub-title">Commandes</div>
 
             <div className="container-command">
-              {setIsLoadingEnCours ?
+              {isLoadingEnCours ?
                 <div>Chargement en cours...</div>
                 :
                 Object.keys(enCours).map((index, mapIndex) => (
@@ -78,13 +115,13 @@ function Admin() {
                       <div className='date'>Etat : {enCours[index].status}</div>
                     </div>
                     <div className="button-container">
-                      <button>Préparé</button>
-                      <button>Suprimer</button>
+                      <button onClick={() => terminerCommand(index)}>Terminé</button>
+                      <button onClick={() => suppression(index)}>Supprimer</button>
                     </div>
                   </div>
                 ))
               }
-              {setIsLoadingTerminer ?
+              {isLoadingTerminer ?
                 <div>Chargement en cours...</div>
                 :
                 Object.keys(terminer).map((index, mapIndex) => (
@@ -94,8 +131,8 @@ function Admin() {
                       <div className='date'>Etat : {terminer[index].status}</div>
                     </div>
                     <div className="button-container">
-                      <button>Préparé</button>
-                      <button>Suprimer</button>
+                      <button onClick={() => enCoursCommand(index)}>En cours</button>
+                      <button onClick={() => suppression(index)}>Supprimer</button>
                     </div>
                   </div>
                 ))
@@ -122,8 +159,8 @@ function Admin() {
                         }
                       </div>
                       <div className="button-container">
-                        <button>Rendre {role === "admin" ? "user" : "admin"}</button>
-                        <button>Suprimer</button>
+                        <button onClick={() => switchRole(index, role)}>Rendre {role === "admin" ? "user" : "admin"}</button>
+                        <button onClick={() => deleteUser(index)}>Suprimer</button>
                       </div>
                     </div>
                   )) 

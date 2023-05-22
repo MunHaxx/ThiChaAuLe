@@ -1,4 +1,4 @@
-.Register{ 
+.Register {
     background-color: #0A3D62;
 }
 
@@ -12,4 +12,53 @@
     font-family: 'Hammersmith One', sans-serif;
     font-size: 80px;
     letter-spacing: 8px;
+}
+
+.Register .title {
+    list-style: none;
+    padding: 0 0 20px 0;
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 100px;
+    letter-spacing: 2px;
+    display: flex;
+    justify-content: center;
+}
+
+.Register .the {
+    color: #4A69BD;
+    margin-right: 30px;
+}
+
+.Register .french {
+    color: white;
+    margin-right: 30px;
+}
+
+.Register .flavor {
+    color: #E55039;
+}
+
+.Register .login-connecter-title {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-size: 35px;
+    padding: 0 0 30px 0;
+}
+
+@media screen and (max-width:1024px) {
+    .Register .title {
+        font-size: 70px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .Register .title {
+        font-size: 50px;
+        flex-direction: column;
+    }
+
+    .Register .the,
+    .Register .french {
+        margin-right: 0px;
+    }
 }

@@ -32,7 +32,7 @@ function Panier() {
     };
 
     fetchData();
-  }, [data]);
+  }, []);
 
   return (
     <>
@@ -56,15 +56,15 @@ function Panier() {
               :
               Object.keys(data.content).map((index, mapIndex) => (
                 <div className="ligne">
-                <div className="command-info">
-                  <div className='id-product'>Produit : {index}</div>
-                  <div className='quantity'>Quantité : {data.content[index]}</div>
+                  <div className="command-info">
+                    <div className='id-product'>Produit : {index}</div>
+                    <div className='quantity'>Quantité : {data.content[index]}</div>
+                  </div>
+                  <div className="button-container">
+                    <button onClick={() => ajout(index)}>Ajouter</button>
+                    <button onClick={() => suppression(index)}>Suprimer</button>
+                  </div>
                 </div>
-                <div className="button-container">
-                  <button onClick={() => ajout(index)}>Ajouter</button>
-                  <button onClick={() => suppression(index)}>Suprimer</button>
-                </div>
-              </div>
               ))
             }
           </div>
