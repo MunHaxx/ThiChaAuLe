@@ -10,6 +10,7 @@ import Panier from './Pages/Panier';
 import Admin from './Pages/Dashboard/Admin';
 import User from './Pages/Dashboard/User';
 import Payment from './component/Payment';
+import PaymentSuccess from './Pages/PaymentSuccess';
 
 function App() {
 
@@ -24,9 +25,10 @@ function App() {
           <Route path="/boxs" element={<Tarif />} />
           <Route path="/panier" element={<Panier />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admindashboard" element={<Admin />} />
           <Route path="/userdashboard" element={<User />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/paymentsuccess" element={<PaymentSuccess />} />
 
         </Routes>
 

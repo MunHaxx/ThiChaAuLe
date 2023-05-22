@@ -3,7 +3,25 @@ import "./Payment.css";
 import { Link } from 'react-router-dom';
 import ResponsiveMessage from './ResponsiveMessage';
 
-function Payment() {
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+
+function Payment() {const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        if (isLoading) {
+          axios.get("http://127.0.0.1:5000/list_panier").then(res => {
+            setData(res.data);
+            setIsLoading(false);
+          })
+        }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <ResponsiveMessage />
@@ -43,11 +61,11 @@ function Payment() {
 
           <div className="ligne-total">
             <div className="command-info">
-              <div className='total'>Total : xxxx €</div>
+              <div className='total'>Total : {isLoading ? "load ..." : data.Total} €</div>
             </div>
             <div className="button-container">
-              <Link to="/payment">Annuler</Link>
-              <Link to="/payment">Payer</Link>
+              <Link to="/panier">Annuler</Link>
+              <Link to="/paymentsuccess">Payer</Link>
             </div>
           </div>
 

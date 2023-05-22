@@ -10,16 +10,19 @@ function Header() {
 
   const handleIsOpen = () => {
     setIsOpen(!isOpen);
+    window.location.reload();
   }
 
   return (
     <div className={isOpen ? "Header show-header" : "Header"}>
-        <div className="links" onClick={handleIsOpen}>
+        <div className="links" onClick={
+        handleIsOpen
+        }>
           <div className = "home">
             <Link to="/">HOME</Link>
             <Link to="/login">LOGIN</Link>
             <Link to="/boxs">BOXS</Link>
-            <Link to="/userdashboard">COMPTE</Link>
+            <Link to="/dashboard">COMPTE</Link>
           </div>
           
           <div className="panier">

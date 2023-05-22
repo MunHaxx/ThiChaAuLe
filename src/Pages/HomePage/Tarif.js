@@ -19,14 +19,17 @@ function Tarif() {
 
   function handleClick(product) {
     navigate('/AddCart/' + product);
+    window.location.reload();
   }
 
   useEffect(() => {
     const fetchData = async () => {
-      axios.get("http://127.0.0.1:5000/api/data").then(res => {
-        setData(res.data);
-        setIsLoading(false);
-      })
+        if (isLoading) {
+          axios.get("http://127.0.0.1:5000/api/data").then(res => {
+            setData(res.data);
+            setIsLoading(false);
+          })
+        }
     };
 
     fetchData();

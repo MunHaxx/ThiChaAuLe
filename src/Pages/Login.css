@@ -1,4 +1,4 @@
-.Login{ 
+.Login {
     background-color: #0A3D62;
 }
 
@@ -7,24 +7,27 @@
     padding: 0 0 10px 0;
 }
 
-.Login .login-site-title {
+.Login .title {
     list-style: none;
-    padding: 20px 0 30px 0;
+    padding: 0 0 20px 0;
     font-family: 'Hammersmith One', sans-serif;
-    font-size: 80px;
-    letter-spacing: 8px;
+    font-size: 100px;
+    letter-spacing: 2px;
+    display: flex;
+    justify-content: center;
 }
 
-.the {
+.Login .the {
     color: #4A69BD;
     margin-right: 30px;
 }
-.french {
+
+.Login .french {
     color: white;
     margin-right: 30px;
 }
 
-.flavor {
+.Login .flavor {
     color: #E55039;
 }
 
@@ -32,8 +35,11 @@
     font-family: 'Open Sans', sans-serif;
     color: white;
     font-size: 35px;
-    font-weight: 500;
     padding: 0 0 30px 0;
+}
+
+.Login .Formulaire-Login {
+    margin-bottom: 40px;
 }
 
 .Login .other-register {
@@ -82,7 +88,7 @@
     background-color: #0A3D62;
 }
 
-.Login .inscrivez-vous a{
+.Login .inscrivez-vous a {
     text-decoration: none;
     font-style: none;
     width: 100vw;
@@ -95,4 +101,24 @@
     min-width: 100%;
     margin-top: 5px;
     cursor: pointer;
+}
+
+@media screen and (max-width:1024px) {
+    .Login .title {
+        font-size: 70px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .Login .title {
+        font-size: 50px;
+        flex-direction: column;
+    }
+
+    .Login .the,
+    .Login .french {
+        margin-right: 0px;
+    }
+
 }

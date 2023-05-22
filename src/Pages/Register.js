@@ -5,12 +5,12 @@ import "./Register.css";
 function Register() {
 
   return (
-    <div className="Register">
+    <div className="Register Page">
         <div className="register-page">
-          <div className="login-site-title">
-            <span className="the">THE</span>  
-            <span className="french">FRENCH</span> 
-            <span className = "flavor">FLAVOR</span>
+          <div className="title">
+          <div className="the">THE</div>  
+            <div className="french">FRENCH</div> 
+            <div className = "flavor">FLAVOR</div>
           </div>
           <div className="login-connecter-title">S'ENREGISTRER</div>
         </div>

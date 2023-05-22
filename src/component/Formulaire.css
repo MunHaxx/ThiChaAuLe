@@ -1,10 +1,9 @@
-.containerFormulaire{
+.containerFormulaire {
     display: flex;
-    width: auto;
-    height:calc(100vh - 80px); 
+    width: 100vw;
+
     background-color: #0A3D62;
     justify-content: center;
-    margin-bottom: -35%;
 }
 
 .containerFormulaire .id-password-login {
@@ -12,13 +11,26 @@
     justify-content: center;
     background-color: #0A3D62;
     width: 400px;
-    height: 45px;
+    height: 50px;
     padding: 0;
-    border-radius: 0px;
+    border-radius: 5px;
     border: 4px solid rgba(255, 255, 255, 0.45);
-    margin-left: -50%;
     text-align: left;
     margin-bottom: 30px;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.containerFormulaire .inputContainer {
+    width: 100vw;
+}
+
+.containerFormulaire .inputContainer form {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .containerFormulaire .id-password-login,
@@ -26,24 +38,24 @@ input::placeholder {
     font-family: 'Open Sans', sans-serif;
     font-size: 20px;
     color: white;
-    padding-left: 5px;
+    /* padding-left: 5px; */
 }
 
 .containerFormulaire .connect-login {
     background-color: rgba(229, 80, 57, 0.8);
     color: white;
-    padding: 10px 90px;
     text-align: center;
     font-size: 25px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 900;
-    margin-left: -25%;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: transform .2s;
+    width: 300px;
+    height: 50px;
 }
 
-.containerFormulaire .connect-login:hover{
+.containerFormulaire .connect-login:hover {
     transform: scale(1.05);
 }

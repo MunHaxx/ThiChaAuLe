@@ -7,12 +7,12 @@ import "./Login.css";
 function Login() {
 
   return (
-    <div className="Login">
+    <div className="Login Page">
         <div className="login-and-register">
-          <div className="login-site-title">
-            <span className="the">THE</span>  
-            <span className="french">FRENCH</span> 
-            <span className = "flavor">FLAVOR</span>
+          <div className="title">
+            <div className="the">THE</div>  
+            <div className="french">FRENCH</div> 
+            <div className="flavor">FLAVOR</div>
           </div>
           <div className="login-connecter-title">SE CONNECTER</div>
           <div className="Formulaire-Login"><Formulaire /></div>
@@ -22,9 +22,6 @@ function Login() {
               <div className="inscrivez-vous" ><Link to="/register">Inscrivez-vous !</Link></div>
             </div>
         </div>
-
-       
-
     </div>
   );
 }
