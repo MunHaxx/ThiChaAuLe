@@ -28,13 +28,23 @@ function Tarif() {
       //   setData(response.data.stocks);
       //   console.log(response.data.stocks);
       //   setIsLoading(false);
-      const result = await axios.get('http://127.0.0.1:5000/api/data');
-      setData(result.data.stocks);
-      console.log(data);
+      // const result = await axios.get('http://localhost:5000/api/data');
+      // setData(result.data.stocks);
+      // console.log(data);
+      // setIsLoading(false);
+
+      axios.get("http://127.0.0.1:5000/api/data").then(res => {
+        setData(res.data);
+        // console.log(res);
+        // console.log(res.data);
+        // console.log(res.data.stocks);
+        
+        setIsLoading(false);
+      })
     };
 
     fetchData();
-  }, []);
+  }, [data]);
 
   // useEffect(() => {
   //   console.log(data)
