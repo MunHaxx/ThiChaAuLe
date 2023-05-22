@@ -24,6 +24,7 @@ users_data = {
                 "password": "jp",
                 "panier": {
                     "Vide": "True",
+                    "Total": "0",
                     "content": {}
                 }
             },

@@ -271,7 +271,8 @@ def UpdateTotalCart(user,stock):
     total = 0
     for item in user["users_list"]["user"][session['id']]["panier"]["content"]:
         quantity = user["users_list"]["user"][session['id']]["panier"]["content"][item]
-        price = stock["stocks"][item]["price"]
+        print(stock)
+        price = stock['stocks'][item]['tarifs']
         total += quantity * price
 
     print("Total du panier:", total)

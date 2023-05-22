@@ -30,6 +30,11 @@ function Tarif() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    console.log(data)
+    console.log(isLoading)
+  }, []);
+
   return (
     <div className="Page Tarif">
         <div className="title">TARIF</div>
