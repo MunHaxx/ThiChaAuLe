@@ -19,7 +19,7 @@ function Header() {
             <Link to="/">HOME</Link>
             <Link to="/login">LOGIN</Link>
             <Link to="/boxs">BOXS</Link>
-            <Link to="/userdashboard">COMPTE</Link>
+            <Link to="/dashboard">COMPTE</Link>
           </div>
           
           <div className="panier">

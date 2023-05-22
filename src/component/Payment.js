@@ -47,7 +47,7 @@ function Payment() {
             </div>
             <div className="button-container">
               <Link to="/payment">Annuler</Link>
-              <Link to="/payment">Payer</Link>
+              <Link to="/payment_succes">Payer</Link>
             </div>
           </div>
 

@@ -1,4 +1,6 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for, session
+import time
+
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session, render_template_string
 import json
 import stripe
 from pymongo import MongoClient
@@ -139,10 +141,26 @@ def register():
     return render_template('index.html')
 
 
+@app.route('/list_users')
+def list_users():
+    if session['type'] == "admin":
+        users_data = users_collection.find_one({})
+        if users_data:
+            return jsonify(users_data["users_list"])
+        else:
+            print("Erreur, il n'y a pas d'utilisateurs dans la base")
+    else:
+        print("Erreur, vous n'êtes pas administrateur")
+
+    return jsonify({})
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if "<SecureCookieSession" in session:
+        return redirect("/dashboard")
     # si le formulaire de connexion est rempli, on récupère les entrées
-    if request.method == 'POST':
+    elif request.method == 'POST':
         id = request.form['id']
         password = request.form['password']
 
@@ -297,23 +315,32 @@ def UpdateTotalCart(user,stock):
     return total
 
 
-@app.route('/AddCart/<product>')
-def AddCart(product):
-    if session['type'] == "user":
+@app.route('/boxs')
+def boxs():
+    return render_template("index.html")
 
+@app.route('/panier')
+def panier():
+    return render_template("index.html")
+
+
+def addcart(product):
+    if session['type'] == "user":
         # Mettre à jour les données du stock dans la collection 'stocks'
         query = {"stocks." + product: {"$exists": True}}
         stock = stocks_collection.find_one(query)
 
         if stock:
+            print("stock")
             if stock["stocks"][product]["quantity"] > 0:
-
+                print("j'ai qt")
                 # Récupérer l'utilisateur actuel depuis la collection 'users'
                 user = users_collection.find_one({"users_list.user." + session['id']: {"$exists": True}})
 
-                #print(user)
+                # print(user)
 
                 if user:
+                    print("jai des users")
                     # Mettre à jour le panier de l'utilisateur
                     if user["users_list"]["user"][session['id']]["panier"]["Vide"] == "True":
                         user["users_list"]["user"][session['id']]["panier"]["Vide"] = "False"
@@ -324,7 +351,7 @@ def AddCart(product):
                         else:
                             user["users_list"]["user"][session['id']]["panier"]["content"][product] = 1
 
-                    total = UpdateTotalCart(user,stock)
+                    total = UpdateTotalCart(user, stock)
 
                     # Mettre à jour le champ "Total" du panier de l'utilisateur
                     user["users_list"]["user"][session['id']]["panier"]["Total"] = str(total)
@@ -339,15 +366,24 @@ def AddCart(product):
                         {"stocks.{}".format(product): {"$exists": True}},
                         {"$inc": {"stocks.{}.quantity".format(product): -1}}
                     )
-
-                    return redirect(url_for("panier"))
+                    print("je renvoi vers panier")
 
             else:
                 print("Le produit est en rupture de stock.")
         else:
             print("Le produit n'existe pas dans le stock.")
 
-    return redirect(url_for("index"))
+
+@app.route('/AddCart/<product>', methods=['GET', 'POST'])
+def AddCart(product):
+    addcart(product)
+    return redirect("/boxs")
+
+
+@app.route('/Cart/AddCart/<product>', methods=['GET', 'POST'])
+def CartAddCart(product):
+    addcart(product)
+    return redirect("/panier")
 
 
 @app.route('/DelCart/<product>')
@@ -390,7 +426,21 @@ def DelCart(product):
         else:
             print("Utilisateur non trouvé.")
 
-    return redirect(url_for("index"))
+    return redirect("/panier")
+
+
+@app.route('/list_panier')
+def list_panier():
+    if session['type'] == 'user':
+        users_data = users_collection.find_one({})
+        if users_data:
+            #print(users_data["users_list"]['user'][session['id']]['panier'])
+            return jsonify(users_data["users_list"]['user'][session['id']]['panier'])
+        else:
+            print("Erreur, il n'y a pas d'utilisateurs dans la base")
+    else:
+        print("Vous êtes un admin, vous n'avez pas de panier")
+    return jsonify({})
 
 
 # --------------------------------------- Paiement ---------------------------------------
@@ -398,18 +448,8 @@ def DelCart(product):
 # Page de paiement
 @app.route("/payment", methods=["POST"])
 def payment():
-    amount = 100  # Valeur à adapter en fonction de la logique de paiement
-    customer = stripe.Customer.create(
-        email=request.form["mail"],
-        source=request.form["token"]
-    )
-    charge = stripe.Charge.create(
-        customer=customer.id,
-        amount=amount,
-        currency="usd",
-        description="Shop paiement"
-    )
-    return redirect(url_for("payment_succes"))
+    if request.method == 'POST':
+        return redirect(url_for("payment_succes"))
 
 
 # page de paiement réussi
@@ -521,6 +561,7 @@ def suppr_cmd(num):
 
 
 # Récupère la liste des commandes d'un user
+@app.route("/list_cmd_user/<user>")
 def list_cmd_user(user):
     # Récupère les données de la base
     users_data = users_collection.find_one({})
@@ -538,7 +579,6 @@ def list_cmd_user(user):
             if listCmd == {}:
                 print("L'utilisateur n'a pas encore réalisé de commandes")
             else:
-                print("Je retourne ça\n", listCmd)
                 return jsonify(listCmd)  # Retourne le fichier json
     else:
         print("L'utilisateur n'existe pas")
@@ -546,7 +586,36 @@ def list_cmd_user(user):
     return jsonify({})
 
 
+@app.route("/list_cmd_user_term/<user>")
+def list_cmd_user_term(user):
+    Lcmd = list_cmd_user(user).get_json()
+    result = {}
+    if Lcmd:
+        for num, cmd in Lcmd.items():
+            if cmd['client'] == user and cmd['status'] == "Terminé":
+                result[num] = cmd
+        return jsonify(result)
+    else:
+        print("Erreur lors de la récup des commandes de l'utilisateur")
+    return jsonify({})
+
+
+@app.route("/list_cmd_user_encours/<user>")
+def list_cmd_user_encours(user):
+    Lcmd = list_cmd_user(user).get_json()
+    result = {}
+    if Lcmd:
+        for num, cmd in Lcmd.items():
+            if cmd['client'] == user and cmd['status'] == "En cours":
+                result[num] = cmd
+        return jsonify(result)
+    else:
+        print("Erreur lors de la récup des commandes de l'utilisateur")
+    return jsonify({})
+
+
 # Récupère la liste des commandes à préparer pour le dashboard ADMIN
+@app.route("/list_cmd_encours")
 def list_cmd_encours():
     if session['type'] == "admin":
         cmd_data = cmd_collection.find_one({})
@@ -569,6 +638,7 @@ def list_cmd_encours():
 
 
 # Récupère la liste des commandes terminé pour le dashboard ADMIN
+@app.route("/list_cmd_term")
 def list_cmd_term():
     if session['type'] == "admin":
         cmd_data = cmd_collection.find_one({})
