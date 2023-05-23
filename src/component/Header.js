@@ -3,13 +3,20 @@ import { Link } from 'react-router-dom'
 import './Header.css';
 import imgCart from '../images/imgCart.png';
 import { useState } from "react"
+import { useNavigate } from 'react-router-dom';
+
 
 function Header() {
-
   const [isOpen, setIsOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleIsOpen = () => {
     setIsOpen(!isOpen);
+  }
+
+  const reload = () => {
+    navigate("/dashboard");
     window.location.reload();
   }
 
@@ -22,7 +29,7 @@ function Header() {
             <Link to="/">HOME</Link>
             <Link to="/login">LOGIN</Link>
             <Link to="/boxs">BOXS</Link>
-            <Link to="/dashboard">COMPTE</Link>
+            <Link to="/dashboard" onClick={reload}>COMPTE</Link>
           </div>
           
           <div className="panier">

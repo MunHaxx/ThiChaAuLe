@@ -108,33 +108,39 @@ function Admin() {
               {isLoadingEnCours ?
                 <div>Chargement en cours...</div>
                 :
-                Object.keys(enCours).map((index, mapIndex) => (
-                  <div className="ligne">
-                    <div className="command-info">
-                      <div className='id-command'>Id : {index}</div>
-                      <div className='date'>Etat : {enCours[index].status}</div>
+                (Object.keys(enCours).length === 0) ?
+                  <div>Il n'y a pas de commande en cours</div> // Ou tout autre rendu que vous souhaitez pour indiquer que les données sont vides
+                :
+                  Object.keys(enCours).map((index, mapIndex) => (
+                    <div className="ligne">
+                      <div className="command-info">
+                        <div className='id-command'>Id : {index}</div>
+                        <div className='date'>Etat : {enCours[index].status}</div>
+                      </div>
+                      <div className="button-container">
+                        <button onClick={() => terminerCommand(index)}>Terminé</button>
+                        <button onClick={() => suppression(index)}>Supprimer</button>
+                      </div>
                     </div>
-                    <div className="button-container">
-                      <button onClick={() => terminerCommand(index)}>Terminé</button>
-                      <button onClick={() => suppression(index)}>Supprimer</button>
-                    </div>
-                  </div>
                 ))
               }
               {isLoadingTerminer ?
                 <div>Chargement en cours...</div>
                 :
-                Object.keys(terminer).map((index, mapIndex) => (
-                  <div className="ligne">
-                    <div className="command-info">
-                      <div className='id-command'>Id : {index}</div>
-                      <div className='date'>Etat : {terminer[index].status}</div>
+                (Object.keys(terminer).length === 0) ?
+                  <div>Il n'y a pas de commande terminer</div> // Ou tout autre rendu que vous souhaitez pour indiquer que les données sont vides
+                :
+                  Object.keys(terminer).map((index, mapIndex) => (
+                    <div className="ligne">
+                      <div className="command-info">
+                        <div className='id-command'>Id : {index}</div>
+                        <div className='date'>Etat : {terminer[index].status}</div>
+                      </div>
+                      <div className="button-container">
+                        <button onClick={() => enCoursCommand(index)}>En cours</button>
+                        <button onClick={() => suppression(index)}>Supprimer</button>
+                      </div>
                     </div>
-                    <div className="button-container">
-                      <button onClick={() => enCoursCommand(index)}>En cours</button>
-                      <button onClick={() => suppression(index)}>Supprimer</button>
-                    </div>
-                  </div>
                 ))
               }
             </div>

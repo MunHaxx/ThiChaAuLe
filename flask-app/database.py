@@ -107,6 +107,50 @@ cmd_data = {
                 "BoxDecouverte": 0,
                 "BoxVinFrom": 0
             }
+        },
+        "4": {
+            "client": "Anne Marie",
+            "date": "23/05/2023",
+            "status": "En cours",
+            "prix": 30,
+            "contenu": {
+                "BoxBoulang": 0,
+                "BoxDecouverte": 1,
+                "BoxVinFrom": 0
+            }
+        },
+        "5": {
+            "client": "Jean Pierre",
+            "date": "22/05/2023",
+            "status": "Terminé",
+            "prix": 30,
+            "contenu": {
+                "BoxBoulang": 0,
+                "BoxDecouverte": 1,
+                "BoxVinFrom": 0
+            }
+        },
+        "6": {
+            "client": "Anne Marie",
+            "date": "22/05/2023",
+            "status": "En cours",
+            "prix": 20,
+            "contenu": {
+                "BoxBoulang": 1,
+                "BoxDecouverte": 1,
+                "BoxVinFrom": 0
+            }
+        },
+        "7": {
+            "client": "Anne Marie",
+            "date": "15/04/2023",
+            "status": "Terminé",
+            "prix": 30,
+            "contenu": {
+                "BoxBoulang": 0,
+                "BoxDecouverte": 1,
+                "BoxVinFrom": 0
+            }
         }
     }
 }
